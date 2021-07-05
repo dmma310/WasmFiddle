@@ -1,0 +1,2 @@
+runtime: nodejs14
+# If entrypoint is omitted, uses package.json start script i.e. "entrypoint: node server.js"

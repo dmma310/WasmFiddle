@@ -1,0 +1,45 @@
+<%- include('./partials/header.ejs') %>
+
+    <body>
+        <div class="row">
+            <h5>
+                WasmFiddle</h5>
+            <select class="form-select" aria-label="Select Language" id="languages">
+                <option selected value="c"> C </option>
+                <option value="cpp"> C++ </option>
+                <option value="rust"> Rust </option>
+            </select>
+            <div class="button-container">
+                <button type="button" class="btn btn-success" onclick="executeCode()"><i class="fas fa-play"></i>
+                    Run</button>
+            </div>
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-share-alt"></i>
+                    Share
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-share"></i>
+                        Embed
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <i class="far fa-envelope"></i>
+                        Email</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-8" style="padding-right: 0;">
+                <textarea class="editor" id="editor"></textarea>
+            </div>
+            <div class="col text-white bg-dark">
+                <div class="output">
+                </div>
+            </div>
+        </div>
+    </body>
+
+    </html>

@@ -4,13 +4,21 @@ const path = require('path');
 app.use(express.json());
 app.use(express.urlencoded());
 
-require('dotenv').config();
 app.set('view engine', 'ejs');
-
 app.enable('trust proxy'); // Ensure req.protocol can use https if applicable
 
 // Static folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', function (req, res) {
+  return res.status(200).render('home');
+});
+
+app.post('/', function(req, res) {
+  const lang = req.body.language;
+  const code = req.body.code;
+  return res.status(201).send('hisdkjf,hsdakj');
+});
 
 const PORT = process.env.PORT || 8080;
 app.listen(process.env.PORT || 8080, () => {
