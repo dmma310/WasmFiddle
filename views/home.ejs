@@ -1,19 +1,23 @@
 <%- include('./partials/header.ejs') %>
 
-    <body>
+    <body class="bg-secondary">
+        <nav class="navbar navbar-dark bg-primary">
+            <span class="navbar-brand mb-0 h1">WasmFiddle</span>
+        </nav>
+        <div class="row" style="height: 75px"></div>
         <div class="row">
-            <h5>
-                WasmFiddle</h5>
-            <select class="form-select" aria-label="Select Language" id="languages">
-                <option selected value="c"> C </option>
-                <option value="cpp"> C++ </option>
-                <option value="rust"> Rust </option>
-            </select>
-            <div class="button-container">
+            <div class="col-5 offset-md-1">
+                <select class="form-select" aria-label="Select Language" id="languages">
+                    <option selected value="c"> C </option>
+                    <option value="cpp"> C++ </option>
+                    <option value="rust"> Rust </option>
+                </select>
+            </div>
+            <div class="col-md-3 ml-5 button-container">
                 <button type="button" class="btn btn-success" onclick="executeCode()"><i class="fas fa-play"></i>
                     Run</button>
             </div>
-            <div class="dropdown">
+            <div class="col dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-share-alt"></i>
@@ -29,13 +33,12 @@
                         Email</a>
                 </div>
             </div>
-
-        </div>
-        <div class="row">
-            <div class="col-8" style="padding-right: 0;">
-                <textarea class="editor" id="editor"></textarea>
+        </div><br>
+        <div class="row" style="height: 700;">
+            <div class="col-5 offset-md-1 mr-5">
+                <textarea class="editor" id="editor" style="resize: none; height: 700;"></textarea>
             </div>
-            <div class="col text-white bg-dark">
+            <div class="col-4 text-white bg-dark">
                 <div class="output">
                 </div>
             </div>
