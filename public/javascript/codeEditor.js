@@ -35,8 +35,17 @@ function executeCode() {
         },
         complete: (e, status, settings) => {
             if (e.status === 201) {
-                $(".output").text(e.responseText);
-            }
+                let line = document.createElement("div");
+                let text = document.createTextNode(e.responseText);
+                line.appendChild(text);
+                $("#output-container").append(line);
+
+		        line.scrollIntoView(false);
+	        }
         }
     });
+}
+
+function clearOutput() {
+    $("#output-container").empty();
 }

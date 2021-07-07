@@ -1,0 +1,5 @@
+.output {
+    overflow-y: auto;
+    position: relative;
+    height: 300px;
+}

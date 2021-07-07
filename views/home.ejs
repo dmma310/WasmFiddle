@@ -16,6 +16,8 @@
             <div class="col-md-3 ml-5 button-container">
                 <button type="button" class="btn btn-success" onclick="executeCode()"><i class="fas fa-play"></i>
                     Run</button>
+                <button type="button" class="btn btn-dark ml-1" onclick="clearOutput()"><i class="fas fa-ban"></i>
+		    Clear</button>
             </div>
             <div class="col dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -40,6 +42,7 @@
             </div>
             <div class="col-4 text-white bg-dark">
                 <div class="output">
+			<div id="output-container"></div>
                 </div>
             </div>
         </div>
