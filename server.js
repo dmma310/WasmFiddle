@@ -17,7 +17,8 @@ app.get('/', function (req, res) {
 app.post('/', function(req, res) {
   const lang = req.body.language;
   const code = req.body.code;
-  return res.status(201).send('hisdkjf,hsdakj');
+  const randStr = Math.random().toString(20).substr(2, 15);
+  return res.status(201).send('> ' + randStr);
 });
 
 const PORT = process.env.PORT || 8080;
