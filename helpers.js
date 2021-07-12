@@ -13,7 +13,7 @@ module.exports.execCode = (language, code) => {
     }
     finally {
         const res = execFileWithWasm(file);
-        // deleteTempFile(file);
+        deleteTempFile(file);
         return res;
     }
 }
