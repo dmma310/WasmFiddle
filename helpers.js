@@ -9,14 +9,13 @@ module.exports.execCode = (language, code) => {
         file = createFileWithCode(language, code);
     }
     catch (e) {
-        deleteTempFile(file);
         return `Error: ${e}`;
     }
-    // Get result of execution
-    const res = execFileWithWasm(file);
-    // TODO: Need to handle errors > will this be deleted?
-    deleteTempFile(file);
-    return res;
+    finally {
+        const res = execFileWithWasm(file);
+        // deleteTempFile(file);
+        return res;
+    }
 }
 
 function createFileWithCode(language, code) {
@@ -29,10 +28,16 @@ function createFileWithCode(language, code) {
 
 function execFileWithWasm(file) {
     const wasmFile = `${file.substr(0, file.indexOf('.') - 1)}.wasm`;
-    return exec(`wasi-sdk-12.0/bin/clang \
-        --sysroot=wasi-sdk-12.0/share/wasi-sysroot \
-        ${file} -o ${wasmFile}`, (err, stdout, stderr) => {
+    return exec(`wasi-sdk-12.0/bin/clang\
+ --sysroot=wasi-sdk-12.0/share/wasi-sysroot\
+ ${file} -o ${wasmFile}`, (err, stdout, stderr) => {
         if (err) {
+            console.log(err);
+            return `Error: ${err.cmd}`;
+            // return `Error: ${err.code}`;
+        }
+        else if (stderr) {
+            console.log(stderr);
             return `Error: ${stderr}`;
         }
         else {
