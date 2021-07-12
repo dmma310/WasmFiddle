@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+
+const {execCode: executeCode} = require('./helpers.js');
 app.use(express.json());
 app.use(express.urlencoded());
 
@@ -17,8 +19,7 @@ app.get('/', function (req, res) {
 app.post('/', function(req, res) {
   const lang = req.body.language;
   const code = req.body.code;
-  const randStr = Math.random().toString(20).substr(2, 15);
-  return res.status(201).send('> ' + randStr);
+  return res.status(201).send(`> ${executeCode(lang, code)}`);
 });
 
 const PORT = process.env.PORT || 8080;
