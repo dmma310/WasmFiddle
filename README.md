@@ -14,3 +14,8 @@ Build a web assembly equivalent of JSFiddle. Allow for users to produce and edit
 ## GCP App URL
 https://wasmfiddle-c-cpp-rust.uw.r.appspot.com
 
+## Additional Tools Needed
+1. wasmtime
+    - https://github.com/bytecodealliance/wasmtime
+2. wasi sdk
+    - https://github.com/WebAssembly/wasi-sdk

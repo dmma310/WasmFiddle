@@ -1,7 +1,7 @@
 {
   "name": "wasmfiddle",
   "version": "1.0.0",
-  "description": "WasmFiddle for C++/Rust",
+  "description": "WasmFiddle for C/C++/Rust",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
