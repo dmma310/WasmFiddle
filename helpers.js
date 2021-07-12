@@ -44,6 +44,11 @@ function execFileWithWasm(file) {
             // Execute wasm file and return results
             return exec(`wasmtime ${wasmFile}`, (err, stdout, stderr) => {
                 if (err) {
+                    return `Error: ${err.cmd}`;
+                    // return `Error: ${err.code}`;
+                }
+                else if (stderr) {
+                    console.log(stderr);
                     return `Error: ${stderr}`;
                 }
                 return stdout;
