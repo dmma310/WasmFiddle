@@ -27,9 +27,7 @@ function createFileWithCode(language, code) {
 }
 
 function execFileWithWasm(file, callback) {
-	console.log(file);
     const wasmFile = `${file.substr(0, file.indexOf('.'))}.wasm`;
-	console.log(wasmFile);
     return exec(`wasi-sdk-12.0/bin/clang\
  --sysroot=wasi-sdk-12.0/share/wasi-sysroot\
  ${file} -o ${wasmFile}`, (err, stdout, stderr) => {
