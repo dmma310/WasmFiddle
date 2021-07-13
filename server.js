@@ -19,7 +19,10 @@ app.get('/', function (req, res) {
 app.post('/', function(req, res) {
   const lang = req.body.language;
   const code = req.body.code;
-  return res.status(201).send(`> ${execCode(lang, code)}`);
+  execCode(lang, code, output => {
+    return res.status(201).send(`> ${output}`);
+  });
+  
 });
 
 const PORT = process.env.PORT || 8080;

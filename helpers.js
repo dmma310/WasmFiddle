@@ -2,56 +2,58 @@ const { exec } = require('child_process');
 const fs = require('fs');
 // const { TEMP_STRING_LEN, RUST_COMPILER, RUST_FILENAME, C_COMPILER, C_VERSION, CPP_COMPILER, CPP_VERSION } = require('./constants');
 
-module.exports.execCode = (language, code) => {
+module.exports.execCode = async (language, code, callback) => {
     // Create temp C/C++/Rust file with random name, write code
     let file;
     try {
-        file = createFileWithCode(language, code);
+        file = await createFileWithCode(language, code);
     }
     catch (e) {
         return `Error: ${e}`;
     }
     finally {
-        const res = execFileWithWasm(file);
-        deleteTempFile(file);
-        return res;
+        const res = await execFileWithWasm(file, output => {
+            deleteTempFile(file);
+            deleteTempFile(`${file.substr(0, file.indexOf('.'))}.wasm`);
+            callback(output);
+        });
     }
 }
 
 function createFileWithCode(language, code) {
     const file = `${randomFileName(language)}`;
-    fs.writeFile(file, code, (err) => {
-        if (err) throw err;
-    });
+    fs.promises.writeFile(file, code);
     return file;
 }
 
-function execFileWithWasm(file) {
-    const wasmFile = `${file.substr(0, file.indexOf('.') - 1)}.wasm`;
+function execFileWithWasm(file, callback) {
+	console.log(file);
+    const wasmFile = `${file.substr(0, file.indexOf('.'))}.wasm`;
+	console.log(wasmFile);
     return exec(`wasi-sdk-12.0/bin/clang\
  --sysroot=wasi-sdk-12.0/share/wasi-sysroot\
  ${file} -o ${wasmFile}`, (err, stdout, stderr) => {
         if (err) {
             console.log(err);
-            return `Error: ${err.cmd}`;
+            callback(`Error: ${err.cmd}`);
             // return `Error: ${err.code}`;
         }
         else if (stderr) {
             console.log(stderr);
-            return `Error: ${stderr}`;
+            callback(`Error: ${stderr}`);
         }
         else {
             // Execute wasm file and return results
             return exec(`wasmtime ${wasmFile}`, (err, stdout, stderr) => {
                 if (err) {
-                    return `Error: ${err.cmd}`;
+                    callback(`Error: ${err.cmd}`);
                     // return `Error: ${err.code}`;
                 }
                 else if (stderr) {
                     console.log(stderr);
-                    return `Error: ${stderr}`;
+                    callback(`Error: ${stderr}`);
                 }
-                return stdout;
+                callback(stdout);
             });
         }
     });
