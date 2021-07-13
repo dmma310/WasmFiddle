@@ -1,6 +1,5 @@
 const { exec } = require('child_process');
 const fs = require('fs');
-// const { TEMP_STRING_LEN, RUST_COMPILER, RUST_FILENAME, C_COMPILER, C_VERSION, CPP_COMPILER, CPP_VERSION } = require('./constants');
 
 module.exports.execCode = async (language, code, callback) => {
     // Create temp C/C++/Rust file with random name, write code
