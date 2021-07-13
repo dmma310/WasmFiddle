@@ -11,6 +11,15 @@ window.onload = _ => {
     $('#languages').change(function () {
         changeLanguage(this.value);
     });
+    // Ensure clear button is disabled
+    $('#clearOutput').prop('disabled', true);
+
+    // TODO: Create this functionality
+    // Generate Embeddable code
+    createEmbedded();
+
+    // Send link to code via email
+    createLinktoCode();
 }
 
 function changeLanguage(val) {
@@ -27,25 +36,41 @@ function changeLanguage(val) {
 
 function executeCode() {
     $.ajax({
-        url: "/",
-        method: "POST",
+        url: '/',
+        method: 'POST',
         data: {
-            language: $("#languages").val(),
+            language: $('#languages').val(),
             code: editor.getValue()
         },
         complete: (e, status, settings) => {
             if (e.status === 201) {
-                let line = document.createElement("div");
-                let text = document.createTextNode(e.responseText);
-                line.appendChild(text);
-                $("#output-container").append(line);
-
-		        line.scrollIntoView(false);
-	        }
+                // let line = document.createElement('div');
+                const text = document.createTextNode(e.responseText);
+                // line.appendChild(text);
+                // $('#output-container').append(line);
+                $('#output-container').append(`<div>${text}</div>`);
+                // Ensure clear button is enabled
+                $('#clearOutput').prop('disabled', false);
+                line.scrollIntoView(false);
+            }
         }
     });
 }
 
 function clearOutput() {
-    $("#output-container").empty();
+    // Ensure clear button is disabled
+    $('#clearOutput').prop('disabled', true);
+    $('#output-container').empty();
+}
+
+function createEmbedded() {
+    $('#embed').click(function(e) {
+        e.preventDefault();
+    });
+}
+
+function createLinktoCode() {
+    $('#email').click(function(e) {
+        e.preventDefault();
+    });
 }

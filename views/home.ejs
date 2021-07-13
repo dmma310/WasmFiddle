@@ -16,7 +16,7 @@
             <div class="col-md-3 ml-5 button-container">
                 <button type="button" class="btn run-btn" onclick="executeCode()"><i class="fas fa-play"></i>
                     Run</button>
-                <button type="button" class="btn btn-dark clear-btn ml-1" onclick="clearOutput()"><i class="fas fa-ban"></i>
+                <button type="button" class="btn btn-dark clear-btn ml-1" id='clearOutput' onclick="clearOutput()"><i class="fas fa-ban"></i>
 		    Clear</button>
             </div>
             <div class="col dropdown">
@@ -26,11 +26,11 @@
                     Share
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="#" id="embed">
                         <i class="fas fa-share"></i>
                         Embed
                     </a>
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="#" id="email">
                         <i class="far fa-envelope"></i>
                         Email</a>
                 </div>
