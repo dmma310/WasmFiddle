@@ -1,7 +1,7 @@
 <%- include('./partials/header.ejs') %>
 
-    <body class="bg-secondary">
-        <nav class="navbar navbar-dark bg-primary">
+    <body class="page-background">
+        <nav class="navbar navbar-dark nav-bar">
             <span class="navbar-brand mb-0 h1">WasmFiddle</span>
         </nav>
         <div class="row" style="height: 75px"></div>
@@ -14,13 +14,13 @@
                 </select>
             </div>
             <div class="col-md-3 ml-5 button-container">
-                <button type="button" class="btn btn-success" onclick="executeCode()"><i class="fas fa-play"></i>
+                <button type="button" class="btn run-btn" onclick="executeCode()"><i class="fas fa-play"></i>
                     Run</button>
-                <button type="button" class="btn btn-dark ml-1" onclick="clearOutput()"><i class="fas fa-ban"></i>
+                <button type="button" class="btn btn-dark clear-btn ml-1" onclick="clearOutput()"><i class="fas fa-ban"></i>
 		    Clear</button>
             </div>
             <div class="col dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                <button class="btn share-btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fas fa-share-alt"></i>
                     Share
@@ -36,13 +36,13 @@
                 </div>
             </div>
         </div><br>
-        <div class="row" style="height: 700;">
-            <div class="col-5 offset-md-1 mr-5">
+        <div class="row" style="height: 1000;">
+            <div class="col-5 offset-md-1 mr-5" style="resize: none; height: 700;">
                 <textarea class="editor" id="editor" style="resize: none; height: 700;"></textarea>
             </div>
             <div class="col-4 text-white bg-dark">
                 <div class="output">
-			<div id="output-container"></div>
+			        <div id="output-container"></div>
                 </div>
             </div>
         </div>
