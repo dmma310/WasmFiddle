@@ -14,7 +14,7 @@ module.exports.execCode = async (language, code, callback) => {
         return `Error: ${e}`;
     }
     finally {
-        await execFileWithWasm(file, output => {
+        await execFileWithWasm(file, language, output => {
             deleteTempFile(file);
             deleteTempFile(`${file.substr(0, file.indexOf('.'))}.wasm`);
             callback(output);
