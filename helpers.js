@@ -1,5 +1,9 @@
 const { exec } = require('child_process');
+const e = require('express');
 const fs = require('fs');
+const WASI_VERSION = 'wasi-sdk-12.0';
+const CLANG = 'clang';
+const CLANGPP = 'clang++';
 
 module.exports.execCode = async (language, code, callback) => {
     // Create temp C/C++/Rust file with random name, write code
@@ -25,11 +29,23 @@ function createFileWithCode(language, code) {
     return file;
 }
 
-function execFileWithWasm(file, callback) {
+function execFileWithWasm(file, language, callback) {
     const wasmFile = `${file.substr(0, file.indexOf('.'))}.wasm`;
-    return exec(`wasi-sdk-12.0/bin/clang\
- --sysroot=wasi-sdk-12.0/share/wasi-sysroot\
- ${file} -o ${wasmFile}`, (err, stdout, stderr) => {
+    let cmd;
+    if (language === 'c') {
+        cmd = `${WASI_VERSION}/bin/${CLANG}\
+        --sysroot=${WASI_VERSION}/share/wasi-sysroot\
+        ${file} -o ${wasmFile}`;
+    }
+    else if (language === 'cpp') {
+        cmd = `${WASI_VERSION}/bin/${CLANGPP}\
+        --sysroot=${WASI_VERSION}/share/wasi-sysroot\
+        ${file} -o ${wasmFile}`;
+    }
+    else {
+        
+    }
+    return exec(cmd, (err, stdout, stderr) => {
         if (err) {
             console.log(err);
             callback(`Error: ${err.cmd}`);
