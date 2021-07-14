@@ -44,11 +44,11 @@ function executeCode() {
         },
         complete: (e, status, settings) => {
             if (e.status === 201) {
-                // let line = document.createElement('div');
+                let line = document.createElement('div');
                 const text = document.createTextNode(e.responseText);
-                // line.appendChild(text);
-                // $('#output-container').append(line);
-                $('#output-container').append(`<div>${text}</div>`);
+                line.appendChild(text);
+                $('#output-container').append(line);
+                // $('#output-container').append(`<div>${text}</div>`);
                 // Ensure clear button is enabled
                 $('#clearOutput').prop('disabled', false);
                 line.scrollIntoView(false);
