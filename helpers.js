@@ -1,5 +1,4 @@
 const { exec } = require('child_process');
-const e = require('express');
 const fs = require('fs');
 const WASI_VERSION = 'wasi-sdk-12.0';
 const CLANG = 'clang';
