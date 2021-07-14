@@ -30,21 +30,8 @@ function createFileWithCode(language, code) {
 
 function execFileWithWasm(file, language, callback) {
     const wasmFile = `${file.substr(0, file.indexOf('.'))}.wasm`;
-    let cmd;
-    if (language === 'c') {
-        cmd = `${WASI_VERSION}/bin/${CLANG}\
-        --sysroot=${WASI_VERSION}/share/wasi-sysroot\
-        ${file} -o ${wasmFile}`;
-    }
-    else if (language === 'cpp') {
-        cmd = `${WASI_VERSION}/bin/${CLANGPP}\
-        --sysroot=${WASI_VERSION}/share/wasi-sysroot\
-        ${file} -o ${wasmFile}`;
-    }
-    else {
-        
-    }
-    return exec(cmd, (err, stdout, stderr) => {
+    const wasmCmd = language === 'rust' ? rustWasmCmd(): wasiCmd(language);
+    return exec(wasmCmd, (err, stdout, stderr) => {
         if (err) {
             console.log(err);
             callback(`Error: ${err.cmd}`);
@@ -85,4 +72,25 @@ function randomFileName(extension = '') {
     return extension === '' ?
         `${Math.random().toString(36).substring(2, 7)}` :
         `${Math.random().toString(36).substring(2, 7)}.${extension}`;
+}
+
+function wasiCmd(language) {
+    if (language === 'c') {
+        cmd = `${WASI_VERSION}/bin/${CLANG}\
+    --sysroot=${WASI_VERSION}/share/wasi-sysroot\
+    ${file} -o ${wasmFile}`;
+        cmd = `wasi-sdk-12.0/bin/clang\
+    --sysroot=wasi-sdk-12.0/share/wasi-sysroot\
+    ${file} -o ${wasmFile}`;
+    }
+    else if (language === 'cpp') {
+        cmd = `${WASI_VERSION}/bin/${CLANGPP}\
+    --sysroot=${WASI_VERSION}/share/wasi-sysroot\
+    ${file} -o ${wasmFile}`;
+    }
+    else {
+    }
+}
+function rustWasmCmd() {
+    
 }
