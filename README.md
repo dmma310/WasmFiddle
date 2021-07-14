@@ -25,3 +25,5 @@ https://wasmfiddle-c-cpp-rust.uw.r.appspot.com
     - https://github.com/WebAssembly/wasi-sdk
     - Install folder at root of this application
     - Note the folder will contain a version i.e. 'wasi-sdk-12.0'. You'll need to update this in helpers.js > execFileWithWasm function > exec(`wasi-sdk-12.0/bin/clang--sysroot=wasi-sdk-12.0/share/wasi-sysroot...`)
+3. rust
+    - 

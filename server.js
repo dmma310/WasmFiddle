@@ -22,7 +22,6 @@ app.post('/', function(req, res) {
   execCode(lang, code, output => {
     return res.status(201).send(`> ${output}`);
   });
-  
 });
 
 const PORT = process.env.PORT || 8080;

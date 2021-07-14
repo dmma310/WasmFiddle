@@ -1,5 +1,8 @@
 const { exec } = require('child_process');
 const fs = require('fs');
+const WASI_VERSION = 'wasi-sdk-12.0';
+const CLANG = 'clang';
+const CLANGPP = 'clang++';
 
 module.exports.execCode = async (language, code, callback) => {
     // Create temp C/C++/Rust file with random name, write code
@@ -11,7 +14,7 @@ module.exports.execCode = async (language, code, callback) => {
         return `Error: ${e}`;
     }
     finally {
-        await execFileWithWasm(file, output => {
+        await execFileWithWasm(file, language, output => {
             deleteTempFile(file);
             deleteTempFile(`${file.substr(0, file.indexOf('.'))}.wasm`);
             callback(output);
@@ -25,11 +28,10 @@ function createFileWithCode(language, code) {
     return file;
 }
 
-function execFileWithWasm(file, callback) {
+function execFileWithWasm(file, language, callback) {
     const wasmFile = `${file.substr(0, file.indexOf('.'))}.wasm`;
-    return exec(`wasi-sdk-12.0/bin/clang\
- --sysroot=wasi-sdk-12.0/share/wasi-sysroot\
- ${file} -o ${wasmFile}`, (err, stdout, stderr) => {
+    const wasmCmd = language === 'rust' ? rustWasmCmd(): wasiCmd(language);
+    return exec(wasmCmd, (err, stdout, stderr) => {
         if (err) {
             console.log(err);
             callback(`Error: ${err.cmd}`);
@@ -70,4 +72,25 @@ function randomFileName(extension = '') {
     return extension === '' ?
         `${Math.random().toString(36).substring(2, 7)}` :
         `${Math.random().toString(36).substring(2, 7)}.${extension}`;
+}
+
+function wasiCmd(language) {
+    if (language === 'c') {
+        cmd = `${WASI_VERSION}/bin/${CLANG}\
+    --sysroot=${WASI_VERSION}/share/wasi-sysroot\
+    ${file} -o ${wasmFile}`;
+        cmd = `wasi-sdk-12.0/bin/clang\
+    --sysroot=wasi-sdk-12.0/share/wasi-sysroot\
+    ${file} -o ${wasmFile}`;
+    }
+    else if (language === 'cpp') {
+        cmd = `${WASI_VERSION}/bin/${CLANGPP}\
+    --sysroot=${WASI_VERSION}/share/wasi-sysroot\
+    ${file} -o ${wasmFile}`;
+    }
+    else {
+    }
+}
+function rustWasmCmd() {
+    
 }
