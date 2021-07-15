@@ -44,14 +44,13 @@ function executeCode() {
         },
         complete: (e, status, settings) => {
             if (e.status === 201) {
-                let line = document.createElement('div');
-                const text = document.createTextNode(e.responseText);
-                line.appendChild(text);
-                $('#output-container').append(line);
-                // $('#output-container').append(`<div>${text}</div>`);
+				// Create new output line
+                const line = $('<div/>', {text: e.responseText});
+                line.appendTo('#output-container');
+				// Scroll to bottom of container
+                line.get(0).scrollIntoView();
                 // Ensure clear button is enabled
                 $('#clearOutput').prop('disabled', false);
-                line.scrollIntoView(false);
             }
         }
     });

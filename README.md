@@ -21,9 +21,11 @@ https://wasmfiddle-c-cpp-rust.uw.r.appspot.com
 
 1. wasmtime
     - https://github.com/bytecodealliance/wasmtime
+	- Install folder containing precompiled binary at the root of this application.
+	- Note the folder contains the version number i.e. 'wasmtime-v0.28.0-x86_64-linux'. You may need to update the WASMTIME_VERSION const variable in the helpers.js file.
 2. wasi sdk
     - https://github.com/WebAssembly/wasi-sdk
     - Install folder at root of this application
-    - Note the folder will contain a version i.e. 'wasi-sdk-12.0'. You'll need to update this in helpers.js > execFileWithWasm function > exec(`wasi-sdk-12.0/bin/clang--sysroot=wasi-sdk-12.0/share/wasi-sysroot...`)
+    - Note the folder will contain a version i.e. 'wasi-sdk-12.0'. You'll need to update the WASI_VERSION const variable in the helpers.js file.
 3. rust
     - 

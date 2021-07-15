@@ -1,6 +1,7 @@
 const { exec } = require('child_process');
 const fs = require('fs');
 const WASI_VERSION = 'wasi-sdk-12.0';
+const WASMTIME_VERSION = 'wasmtime-v0.28.0-x86_64-linux';
 const CLANG = 'clang';
 const CLANGPP = 'clang++';
 
@@ -23,14 +24,14 @@ module.exports.execCode = async (language, code, callback) => {
 }
 
 function createFileWithCode(language, code) {
-    const file = `${randomFileName(language)}`;
-    fs.promises.writeFile(file, code);
+    const file = `tmp/${randomFileName(language)}`;
+    fs.promises.writeFile(`${file}`, code);
     return file;
 }
 
 function execFileWithWasm(file, language, callback) {
     const wasmFile = `${file.substr(0, file.indexOf('.'))}.wasm`;
-    const wasmCmd = language === 'rust' ? rustWasmCmd(): wasiCmd(language);
+    const wasmCmd = language === 'rust' ? rustWasmCmd(): wasiCmd(language, file, wasmFile);
     return exec(wasmCmd, (err, stdout, stderr) => {
         if (err) {
             console.log(err);
@@ -43,7 +44,7 @@ function execFileWithWasm(file, language, callback) {
         }
         else {
             // Execute wasm file and return results
-            return exec(`wasmtime ${wasmFile}`, (err, stdout, stderr) => {
+            return exec(`${WASMTIME_VERSION}/wasmtime ${wasmFile}`, (err, stdout, stderr) => {
                 if (err) {
                     callback(`Error: ${err.cmd}`);
                     // return `Error: ${err.code}`;
@@ -74,15 +75,12 @@ function randomFileName(extension = '') {
         `${Math.random().toString(36).substring(2, 7)}.${extension}`;
 }
 
-function wasiCmd(language) {
+function wasiCmd(language, file, wasmFile) {
     if (language === 'c') {
         cmd = `${WASI_VERSION}/bin/${CLANG}\
     --sysroot=${WASI_VERSION}/share/wasi-sysroot\
     ${file} -o ${wasmFile}`;
-        cmd = `wasi-sdk-12.0/bin/clang\
-    --sysroot=wasi-sdk-12.0/share/wasi-sysroot\
-    ${file} -o ${wasmFile}`;
-    }
+	}
     else if (language === 'cpp') {
         cmd = `${WASI_VERSION}/bin/${CLANGPP}\
     --sysroot=${WASI_VERSION}/share/wasi-sysroot\
@@ -90,6 +88,7 @@ function wasiCmd(language) {
     }
     else {
     }
+	return cmd;
 }
 function rustWasmCmd() {
     
