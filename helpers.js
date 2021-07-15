@@ -25,7 +25,7 @@ module.exports.execCode = async (language, code, callback) => {
 
 function createFileWithCode(language, code) {
     const file = `tmp/${randomFileName(language)}`;
-    fs.promises.writeFile(`${file}`, code);
+    fs.promises.writeFile(file, code);
     return file;
 }
 
@@ -90,6 +90,7 @@ function wasiCmd(language, file, wasmFile) {
     }
 	return cmd;
 }
+
 function rustWasmCmd() {
     
 }
