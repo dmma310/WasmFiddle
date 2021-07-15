@@ -16,8 +16,9 @@
             <div class="col-md-3 ml-5 button-container">
                 <button type="button" class="btn run-btn" onclick="executeCode()"><i class="fas fa-play"></i>
                     Run</button>
-                <button type="button" class="btn btn-dark clear-btn ml-1" id='clearOutput' onclick="clearOutput()"><i class="fas fa-ban"></i>
-		    Clear</button>
+                <button type="button" class="btn btn-dark clear-btn ml-1" id='clearOutput' onclick="clearOutput()"><i
+                        class="fas fa-ban"></i>
+                    Clear</button>
             </div>
             <div class="col dropdown">
                 <button class="btn share-btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -26,11 +27,11 @@
                     Share
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#" id="embed">
+                    <a class="dropdown-item" href="#embedCodeModal" id="embed" data-toggle="modal">
                         <i class="fas fa-share"></i>
                         Embed
                     </a>
-                    <a class="dropdown-item" href="#" id="email">
+                    <a class="dropdown-item disabled" href="#" id="email">
                         <i class="far fa-envelope"></i>
                         Email</a>
                 </div>
@@ -42,7 +43,32 @@
             </div>
             <div class="col-4 text-white bg-dark">
                 <div class="output">
-			        <div id="output-container"></div>
+                    <div id="output-container"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal to show code to embed in website -->
+        <div class="modal fade" tabindex="-1" role="dialog" id="embedCodeModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header border-0">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row no-gutters">
+                            <div class="col-10 align-self-center">
+                                <input type="text" class="form-control" id="embeddableCode" readonly value='<%- include('./partials/embeddable.ejs') %>'>
+                            </div>
+                            <div class="col align-self-center">
+                                <div type="button" id="copyEmbedCode" onclick="copyEmbeddedCode('embeddableCode')">
+                                    <i class="far fa-copy fa-lg"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
