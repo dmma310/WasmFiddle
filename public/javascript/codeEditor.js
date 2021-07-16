@@ -8,6 +8,7 @@ window.onload = _ => {
         mode: 'text/x-csrc',
         lineWrapping: true
     });
+    // editor.setSize(600, 300);
     $('#languages').change(function () {
         changeLanguage(this.value);
     });
