@@ -14,10 +14,6 @@ window.onload = _ => {
     // Ensure clear button is disabled
     $('#clearOutput').prop('disabled', true);
 
-    // TODO: Create this functionality
-    // Generate Embeddable code
-    createEmbedded();
-
     // Send link to code via email
     createLinktoCode();
 }
@@ -45,7 +41,7 @@ function executeCode() {
         complete: (e, status, settings) => {
             if (e.status === 201) {
                 // Create new output line
-                const line = $('<div/>', {text: e.responseText});
+                const line = $('<div/>', { text: e.responseText });
                 line.appendTo('#output-container');
                 // Scroll to bottom of container
                 line.get(0).scrollIntoView();
@@ -62,14 +58,17 @@ function clearOutput() {
     $('#output-container').empty();
 }
 
-function createEmbedded() {
-    $('#embed').click(function(e) {
-        e.preventDefault();
-    });
+function copyEmbeddedCode(id) {
+    // Select and copy text into clipboard
+    const text = $(`#${id}`).select();
+    document.execCommand('copy');
+    // Hide popup and show successfully copy toast.
+    $('#embedCodeModal').modal('hide');
+    $('#copiedToast').toast({delay:1000}).toast('show');
 }
 
 function createLinktoCode() {
-    $('#email').click(function(e) {
+    $('#email').click(function (e) {
         e.preventDefault();
     });
 }

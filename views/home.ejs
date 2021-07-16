@@ -1,9 +1,9 @@
 <%- include('./partials/header.ejs') %>
 
     <body class="page-background">
-        <nav class="navbar navbar-dark nav-bar">
-            <span class="navbar-brand mb-0 h1">WasmFiddle</span>
-        </nav>
+        <!-- Navbar -->
+        <%- include('./partials/navbar.ejs', {title: 'WasmFiddle'}) %>
+        
         <div class="row" style="height: 75px"></div>
         <div class="row">
             <div class="col-5 offset-md-1">
@@ -16,8 +16,9 @@
             <div class="col-md-3 ml-5 button-container">
                 <button type="button" class="btn run-btn" onclick="executeCode()"><i class="fas fa-play"></i>
                     Run</button>
-                <button type="button" class="btn btn-dark clear-btn ml-1" id='clearOutput' onclick="clearOutput()"><i class="fas fa-ban"></i>
-		    Clear</button>
+                <button type="button" class="btn btn-dark clear-btn ml-1" id='clearOutput' onclick="clearOutput()"><i
+                        class="fas fa-ban"></i>
+                    Clear</button>
             </div>
             <div class="col dropdown">
                 <button class="btn share-btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
@@ -26,11 +27,11 @@
                     Share
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#" id="embed">
+                    <a class="dropdown-item" href="#embedCodeModal" id="embed" data-toggle="modal">
                         <i class="fas fa-share"></i>
                         Embed
                     </a>
-                    <a class="dropdown-item" href="#" id="email">
+                    <a class="dropdown-item disabled" href="#" id="email">
                         <i class="far fa-envelope"></i>
                         Email</a>
                 </div>
@@ -42,10 +43,16 @@
             </div>
             <div class="col-4 text-white bg-dark">
                 <div class="output">
-			        <div id="output-container"></div>
+                    <div id="output-container"></div>
                 </div>
             </div>
         </div>
+
+        <!-- Modal to show code to embed in website -->
+        <%- include('./partials/modal.ejs', {modalId: 'embedCodeModal', embeddableCodeId: 'embeddableCode'}) %>
+
+        <!-- Toast -->
+        <%- include('./partials/toast.ejs', {toastId: 'copiedToast', toastMsg: 'Copied!'}) %>
     </body>
 
     </html>
