@@ -62,9 +62,9 @@ function copyEmbeddedCode(id) {
     // Select and copy text into clipboard
     const text = $(`#${id}`).select();
     document.execCommand('copy');
-    // Hide popup and show successfully copy toast. This shows all toasts.
+    // Hide popup and show successfully copy toast.
     $('#embedCodeModal').modal('hide');
-    $('.toast').toast({delay:1000}).toast('show');
+    $('#copiedToast').toast({delay:1000}).toast('show');
 }
 
 function createLinktoCode() {
