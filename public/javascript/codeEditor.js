@@ -8,7 +8,7 @@ let editor;
 window.onload = _ => {
     let code = $('.editor')[0];
     editor = CodeMirror.fromTextArea(code, {
-		lineNumbers: true,
+        lineNumbers: true,
         theme: 'dracula',
         mode: 'text/x-csrc',
         lineWrapping: true
