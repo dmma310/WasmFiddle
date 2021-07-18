@@ -4,6 +4,10 @@
     height: 300px;
 }
 
+#output-container {
+    margin: 5px;
+}
+
 .page-background {
     background-color: #adb5bd;
 }

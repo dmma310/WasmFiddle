@@ -1,3 +1,8 @@
+const codeStates = {
+    c: '#include <stdio.h>\n\nint main() {\n  printf("Hello World!");\n\  return 0;\n}\n',
+    cpp: '#include <iostream>\n\nint main() {\n  std::cout << "Hello World!";\n  return 0;\n}\n',
+    rust: 'fn main() {\n  println!("Hello World!");\n}\n'
+};
 let editor;
 
 window.onload = _ => {
@@ -8,7 +13,10 @@ window.onload = _ => {
         mode: 'text/x-csrc',
         lineWrapping: true
     });
-    // editor.setSize(600, 300);
+    editor.setValue(codeStates.c);
+    $('#languages').focusin(function() {
+		codeStates[this.value] = editor.getValue();
+    });
     $('#languages').change(function () {
         changeLanguage(this.value);
     });
@@ -29,6 +37,7 @@ function changeLanguage(val) {
     else if (val === 'rust') {
         editor.setOption('mode', 'text/x-rustsrc');
     }
+    editor.setValue(codeStates[val]);
 }
 
 function executeCode() {

@@ -88,7 +88,7 @@ function wasiCmd(language, file, wasmFile) {
     }
     else {
     }
-	return cmd;
+    return cmd;
 }
 
 function rustWasmCmd() {
