@@ -31,7 +31,7 @@ function createFileWithCode(language, code) {
 
 function execFileWithWasm(file, language, callback) {
     const wasmFile = `${file.substr(0, file.indexOf('.'))}.wasm`;
-    const wasmCmd = language === 'rust' ? rustWasmCmd(): wasiCmd(language, file, wasmFile);
+    const wasmCmd = language === 'rust' ? rustWasmCmd() : wasiCmd(language, file, wasmFile);
     return exec(wasmCmd, (err, stdout, stderr) => {
         if (err) {
             console.log(err);
@@ -76,21 +76,16 @@ function randomFileName(extension = '') {
 }
 
 function wasiCmd(language, file, wasmFile) {
-    if (language === 'c') {
-        cmd = `${WASI_VERSION}/bin/${CLANG}\
-    --sysroot=${WASI_VERSION}/share/wasi-sysroot\
-    ${file} -o ${wasmFile}`;
-	}
-    else if (language === 'cpp') {
-        cmd = `${WASI_VERSION}/bin/${CLANGPP}\
+    if (language === 'cpp') {
+        return `${WASI_VERSION}/bin/${CLANGPP}\
     --sysroot=${WASI_VERSION}/share/wasi-sysroot\
     ${file} -o ${wasmFile}`;
     }
-    else {
-    }
-    return cmd;
+    return `${WASI_VERSION}/bin/${CLANG}\
+    --sysroot=${WASI_VERSION}/share/wasi-sysroot\
+    ${file} -o ${wasmFile}`;
 }
 
 function rustWasmCmd() {
-    
+
 }

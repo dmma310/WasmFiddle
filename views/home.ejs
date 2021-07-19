@@ -3,7 +3,6 @@
     <body class="page-background">
         <!-- Navbar -->
         <%- include('./partials/navbar.ejs', {title: 'WasmFiddle'}) %>
-        
         <div class="row" style="height: 75px"></div>
         <div class="row">
             <div class="col-5 offset-md-1">
@@ -37,10 +36,9 @@
                 </div>
             </div>
         </div><br>
-        <div class="row" style="height: 1000;">
-            <div class="col-5 offset-md-1 mr-5" style="resize: none; height: 700;">
-                <textarea class="editor" id="editor" style="resize: none; height: 700;"></textarea>
-            </div>
+        <div class="row no-gutters" style="height: 1000;">
+            <div class="col-5 offset-md-1 mr-5" style="resize: none">
+                <textarea class="editor" id="editor" style="resize: none"></textarea>            </div>
             <div class="col-4 text-white bg-dark">
                 <div class="output">
                     <div id="output-container"></div>
