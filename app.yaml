@@ -2,4 +2,4 @@ runtime: nodejs14
 # If entrypoint is omitted, uses package.json start script i.e. "entrypoint: node server.js"
 steps:
 - name: 'bash'
-  args: ['./myscript.bash']
+  args: ['./setup.bash']
