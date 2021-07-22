@@ -1,7 +1,19 @@
 const codeStates = {
-    c: '#include <stdio.h>\n\nint main() {\n  printf("Hello World!");\n\  return 0;\n}\n',
-    cpp: '#include <iostream>\n\nint main() {\n  std::cout << "Hello World!";\n  return 0;\n}\n',
-    rust: 'fn main() {\n  println!("Hello World!");\n}\n'
+    c: {
+        code: '#include <stdio.h>\n\nint main() {\n  printf("Hello World!");\n\  return 0;\n}\n',
+        options: ['c89', 'gnu89', 'c94', 'c99', 'gnu99', 'c11', 'gnu11', 'c17', 'gnu17', 'c2x', 'gnu2x'],
+	    selected: 'c17'
+    },
+    cpp: {
+        code: '#include <iostream>\n\nint main() {\n  std::cout << "Hello World!";\n  return 0;\n}\n',
+        options: ['c++89', 'c++11', 'c++14', 'c++17', 'c++20'],
+        selected: 'c++17'
+    },
+    rust: {
+        code: 'fn main() {\n  println!("Hello World!");\n}\n',
+        options: [],
+        selected: ''
+	}
 };
 let editor;
 
@@ -13,13 +25,25 @@ window.onload = _ => {
         mode: 'text/x-csrc',
         lineWrapping: true
     });
-    editor.setValue(codeStates.c);
-    $('#languages').focusin(function() {
-		codeStates[this.value] = editor.getValue();
+	// Set default code
+    editor.setValue(codeStates[$('#languages').val()].code);
+	// Cascade std options dropdown
+	filterStdOptions($('#languages').val());
+	// Select default value
+	$('#std-options').val(codeStates[$('#languages').val()].selected);
+
+    $('#languages').focusin(function () {
+        codeStates[this.value].code = editor.getValue();
     });
     $('#languages').change(function () {
         changeLanguage(this.value);
+        filterStdOptions(this.value);
+		$('#std-options').val(codeStates[this.value].selected);
     });
+    $('#std-options').change(function () {
+        codeStates[$('#languages').val()].selected = this.value;
+    });
+
     // Ensure clear button is disabled
     $('#clearOutput').prop('disabled', true);
 
@@ -37,7 +61,15 @@ function changeLanguage(val) {
     else if (val === 'rust') {
         editor.setOption('mode', 'text/x-rustsrc');
     }
-    editor.setValue(codeStates[val]);
+    editor.setValue(codeStates[val].code);
+}
+
+function filterStdOptions(val) {
+	// Get and set standards associated with language
+    const html = $.map(codeStates[val].options, opt => {
+        return '<option value="' + opt + '"> ' + opt + '</option>';
+	}).join('');
+	$('#std-options').html(html);
 }
 
 function executeCode() {
@@ -46,6 +78,7 @@ function executeCode() {
         method: 'POST',
         data: {
             language: $('#languages').val(),
+            options: '-std=' + $('#std-options').val(),
             code: editor.getValue()
         },
         complete: (e, status, settings) => {
