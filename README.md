@@ -17,6 +17,8 @@ Build a web assembly equivalent of JSFiddle. Allow for users to produce and edit
 
 https://wasmfiddle-c-cpp-rust.uw.r.appspot.com
 
+### NOTE: A 'setup.bash' is included as part of the app.yaml file. It is used when deploying to GCP to install required libraries.
+
 ## Additional Tools Needed
 
 1. wasmtime
