@@ -29,3 +29,4 @@ https://wasmfiddle-c-cpp-rust.uw.r.appspot.com
     - Note the folder will contain a version i.e. 'wasi-sdk-12.0'. You'll need to update the WASI_VERSION const variable in the helpers.js file.
 3. rust
     - https://github.com/bytecodealliance/wasmtime/blob/main/docs/WASI-tutorial.md#from-rust
+    - https://rustwasm.github.io/docs/book/game-of-life/setup.html
