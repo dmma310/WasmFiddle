@@ -1,3 +1,5 @@
+const CODE = "code";
+
 const codeStates = {
     c: '#include <stdio.h>\n\nint main() {\n  printf("Hello World!");\n\  return 0;\n}\n',
     cpp: '#include <iostream>\n\nint main() {\n  std::cout << "Hello World!";\n  return 0;\n}\n',
@@ -78,7 +80,41 @@ function copyEmbeddedCode(id) {
 }
 
 function createLinktoCode() {
-    $('#email').click(function (e) {
-        e.preventDefault();
+    // $('#email').click(function (e) {
+    //     e.preventDefault();
+    // });
+
+    var key = post_code();
+
+    $.ajax({
+        url: '/',
+        method: 'GET',
+        // data: {
+        //     language: $('#languages').val(),
+        //     code: editor.getValue()
+        // },
+        complete: (e, status, settings) => {
+            if (e.status === 201) {
+
+            }
+        }
     });
+
+
+}
+
+function post_code() {
+
+    //const datastore = new Datastore();
+    var language = $('#languages').val();
+    var code = editor.getValue();
+
+    var code_key = this.datastore.key(CODE);
+    var new_code = {"language": language, "code": code}
+
+    datastore.save({"key": code_key, "data": new_code});
+
+    console.log("Hello" + code_id);
+
+    return code_key
 }
