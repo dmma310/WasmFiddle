@@ -17,6 +17,8 @@ Build a web assembly equivalent of JSFiddle. Allow for users to produce and edit
 
 https://wasmfiddle-c-cpp-rust.uw.r.appspot.com
 
+### NOTE: A 'setup.bash' is included as part of the app.yaml file. It is used when deploying to GCP to install required libraries.
+
 ## Additional Tools Needed
 
 1. wasmtime
@@ -29,3 +31,4 @@ https://wasmfiddle-c-cpp-rust.uw.r.appspot.com
     - Note the folder will contain a version i.e. 'wasi-sdk-12.0'. You'll need to update the WASI_VERSION const variable in the helpers.js file.
 3. rust
     - https://github.com/bytecodealliance/wasmtime/blob/main/docs/WASI-tutorial.md#from-rust
+    - https://rustwasm.github.io/docs/book/game-of-life/setup.html
