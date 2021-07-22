@@ -2,7 +2,7 @@ const codeStates = {
     c: {
         code: '#include <stdio.h>\n\nint main() {\n  printf("Hello World!");\n\  return 0;\n}\n',
         options: ['c89', 'gnu89', 'c94', 'c99', 'gnu99', 'c11', 'gnu11', 'c17', 'gnu17', 'c2x', 'gnu2x'],
-	    selected: 'c17'
+        selected: 'c17'
     },
     cpp: {
         code: '#include <iostream>\n\nint main() {\n  std::cout << "Hello World!";\n  return 0;\n}\n',
@@ -13,7 +13,7 @@ const codeStates = {
         code: 'fn main() {\n  println!("Hello World!");\n}\n',
         options: [],
         selected: ''
-	}
+    }
 };
 let editor;
 
@@ -25,12 +25,12 @@ window.onload = _ => {
         mode: 'text/x-csrc',
         lineWrapping: true
     });
-	// Set default code
+    // Set default code
     editor.setValue(codeStates[$('#languages').val()].code);
-	// Cascade std options dropdown
-	filterStdOptions($('#languages').val());
-	// Select default value
-	$('#std-options').val(codeStates[$('#languages').val()].selected);
+    // Cascade std options dropdown
+    filterStdOptions($('#languages').val());
+    // Select default value
+    $('#std-options').val(codeStates[$('#languages').val()].selected);
 
     $('#languages').focusin(function () {
         codeStates[this.value].code = editor.getValue();
@@ -38,7 +38,7 @@ window.onload = _ => {
     $('#languages').change(function () {
         changeLanguage(this.value);
         filterStdOptions(this.value);
-		$('#std-options').val(codeStates[this.value].selected);
+        $('#std-options').val(codeStates[this.value].selected);
     });
     $('#std-options').change(function () {
         codeStates[$('#languages').val()].selected = this.value;
@@ -65,11 +65,11 @@ function changeLanguage(val) {
 }
 
 function filterStdOptions(val) {
-	// Get and set standards associated with language
+    // Get and set standards associated with language
     const html = $.map(codeStates[val].options, opt => {
         return '<option value="' + opt + '"> ' + opt + '</option>';
-	}).join('');
-	$('#std-options').html(html);
+    }).join('');
+    $('#std-options').html(html);
 }
 
 function executeCode() {
