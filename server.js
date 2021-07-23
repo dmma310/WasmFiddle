@@ -18,8 +18,9 @@ app.get('/', function (req, res) {
 
 app.post('/', function(req, res) {
   const lang = req.body.language;
+  const options = req.body.options;
   const code = req.body.code;
-  execCode(lang, code, output => {
+  execCode(lang, options, code, output => {
     return res.status(201).send(`> ${output}`);
   });
 });
