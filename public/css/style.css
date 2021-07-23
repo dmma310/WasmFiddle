@@ -5,7 +5,12 @@
 }
 
 #output-container {
-    margin: 5px;
+    padding: 5px 10px;
+		font-family: 'Consolas', monospace;
+}
+
+.line {
+    white-space: pre-wrap;
 }
 
 .page-background {
