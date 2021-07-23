@@ -81,14 +81,12 @@ function wasmCmd(language, options, file, wasmFile = null) {
     if (language === 'cpp') {
         return `${WASI_VERSION}/bin/${CLANGPP}\
     --sysroot=${WASI_VERSION}/share/wasi-sysroot\
-    ${options}\
-    ${file} -o ${wasmFile}`;
+    ${options} ${file} -o ${wasmFile}`;
     }
     if (language === 'c') {
         return `${WASI_VERSION}/bin/${CLANG}\
         --sysroot=${WASI_VERSION}/share/wasi-sysroot\
-        ${options}\
-        ${file} -o ${wasmFile}`;
+        ${options} ${file} -o ${wasmFile}`;
     }
     return `rustc --target wasm32-wasi ${file} -o ${wasmFile}`;
 }
