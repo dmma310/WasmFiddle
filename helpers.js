@@ -117,7 +117,7 @@ function execWasm(wasmFile, callback) {
             console.log(stderr);
             return callback(`Error: ${stderr}`);
         }
-		if (err) {
+        if (err) {
             return callback(`Error: ${err.cmd}`);
         }
         return callback(stdout);
