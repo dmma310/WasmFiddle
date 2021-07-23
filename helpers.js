@@ -45,13 +45,13 @@ function execCCPP(language, options, file, wasmFile, callback) {
     // Generate wasm file with wasmtime, using the appropriate compiler
     const cmd = wasmCmd(language, options, file, wasmFile);
     return exec(cmd, (err, stdout, stderr) => {
-        if (err) {
-            console.log(err);
-            return callback(`Error: ${err.cmd}`);
-        }
         if (stderr) {
             console.log(stderr);
             return callback(`Error: ${stderr}`);
+        }
+        if (err) {
+            console.log(err);
+            return callback(`Error: ${err.cmd}`);
         }
         // Execute wasm file and return results
         return execWasm(wasmFile, callback);
@@ -99,12 +99,12 @@ function execRust(rustFile, wasmFile, callback) {
     const rustWasmCmd = wasmCmd('rust', '', rustFile, wasmFile);
     // Create and execute wasm file, return results
     return exec(rustWasmCmd, (err, stdout, stderr) => {
-        if (err) {
-            return callback(`Error: ${err.cmd}`);
-        }
         if (stderr) {
             console.log(stderr);
             return callback(`Error: ${stderr}`);
+        }
+        if (err) {
+            return callback(`Error: ${err.cmd}`);
         }
         return execWasm(wasmFile, callback);
     });
@@ -113,12 +113,12 @@ function execRust(rustFile, wasmFile, callback) {
 function execWasm(wasmFile, callback) {
     // Execute wasm file and return results
     return exec(`${WASMTIME_VERSION}/wasmtime ${wasmFile}`, (err, stdout, stderr) => {
-        if (err) {
-            return callback(`Error: ${err.cmd}`);
-        }
         if (stderr) {
             console.log(stderr);
             return callback(`Error: ${stderr}`);
+        }
+		if (err) {
+            return callback(`Error: ${err.cmd}`);
         }
         return callback(stdout);
     });
