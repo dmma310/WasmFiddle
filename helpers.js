@@ -26,7 +26,7 @@ module.exports.execCode = async (language, options, code, callback) => {
 
 // Creates the specified file type with random name
 function createFileWithCode(language, code) {
-    const file = `tmp/${randomFileName(language)}`;
+    const file = `/tmp/${randomFileName(language)}`;
     fs.promises.writeFile(file, code);
     return file;
 }
