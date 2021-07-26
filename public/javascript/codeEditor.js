@@ -49,6 +49,10 @@ window.onload = _ => {
 
     // Send link to code via email
     createLinktoCode();
+
+    // Set compilation intructions
+    $('#instructions-container').text(runInstruc('c', 'c17', 'hello.c'));
+    // $('#instructions-container').text(runInstruc('c', codeStates['c'].options[8]));
 }
 
 function changeLanguage(val) {
@@ -61,6 +65,9 @@ function changeLanguage(val) {
     else if (val === 'rust') {
         editor.setOption('mode', 'text/x-rustsrc');
     }
+    // Set new compilation intructions
+    // TODO: Options
+    $('#instructions-container').val(runInstruc(val, [codeStates[val].selected], `${hello}.${val === 'rust' ? rs : val}`));
     editor.setValue(codeStates[val].code);
 }
 
@@ -114,4 +121,20 @@ function createLinktoCode() {
     $('#email').click(function (e) {
         e.preventDefault();
     });
+}
+
+// Use like compileInstruc('gcc', [Wall, std=gnu89], 'test.c');
+function compileInstruc(compiler, options, file) {
+    return `${compiler} -${options.join('- ')} ${file} -o ${file.substr(0, file.indexOf('.'))}`;
+}
+
+function runInstruc(lang, std, file) {
+    if (lang === 'c') {
+        return compileInstruc('gcc', [`std=${std}`], file);
+    }
+    if (lang === 'cpp') {
+        return compileInstruc('g++', [`std=${std}`], file);
+    }
+    return `rustc file`;
+
 }
