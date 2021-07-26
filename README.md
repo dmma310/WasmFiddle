@@ -11,7 +11,7 @@
 
 ## Motivations
 
-Build a web assembly equivalent of JSFiddle. Allow for users to produce and edit code in the browser and immediately see the results in the browser. Site would enable quick prototyping in the browser, allow people to share online solutions to coding problems in these languages that can be viewed and run online. It will introduce new coders to web assembly. This could also become part of educational offerings, sites, and blog posts that teach programming in these compiled languages. Lessons covering aspects of programming can have embedded pages that have readers stop, write code applying the concepts just taught, and the output can be viewed and checked interactively online without requiring the reader to move code to a separate development server where it is compiled and executed and lets them try code out as they read and learn.
+Build a web assembly equivalent of JSFiddle. Allow users to produce and edit code in the browser and immediately see the results in the browser. Site would enable quick prototyping in the browser, allow people to share online solutions to coding problems in these languages that can be viewed and run online. It will introduce new coders to web assembly. This could also become part of educational offerings, sites, and blog posts that teach programming in these compiled languages. Lessons covering aspects of programming can have embedded pages that have readers stop, write code applying the concepts just taught, and the output can be viewed and checked interactively online without requiring the reader to move code to a separate development server where it is compiled and executed and lets them try code out as they read and learn.
 
 ## GCP App URL
 
