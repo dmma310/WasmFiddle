@@ -90,7 +90,7 @@ function wasmCmd(language, options, file, wasmFile = null) {
         ${options}\
         ${file} -o ${wasmFile}`;
     }
-    return `rustc --target wasm32-wasi ${file} -o ${wasmFile}`;
+    return `rust/bin/rustc --target wasm32-wasi ${file} -o ${wasmFile}`;
 }
 
 // Use wasitime to execute and return results of Rust.wasm
@@ -106,7 +106,7 @@ function execRust(rustFile, wasmFile, callback) {
         if (err) {
             return callback(`Error: ${err.cmd}`);
         }
-        return execWasm(wasmFile, callback);
+		return execWasm(wasmFile, callback);
     });
 }
 
