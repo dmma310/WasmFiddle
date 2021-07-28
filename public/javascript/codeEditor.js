@@ -83,7 +83,6 @@ function filterStdOptions(val) {
     // Get and set standards associated with language
     const html = $.map(codeStates[val].options, opt => {
         return `<option value="${opt}">${opt}</option>`;
-        // return '<option value="' + opt + '"> ' + opt + '</option>';
     }).join('');
     $('#std-options').html(html);
 }
