@@ -2,57 +2,77 @@
 
     <body class="page-background">
         <!-- Navbar -->
-        <%- include('./partials/navbar.ejs', {title: 'WasmFiddle'}) %>
-        <div class="row" style="height: 75px"></div>
-        <div class="row">
-            <div class="col-5 offset-md-1">
-                <select class="form-select" aria-label="Select Language" id="languages">
-                    <option selected value="c"> C </option>
-                    <option value="cpp"> C++ </option>
-                    <option value="rust"> Rust </option>
-                </select>
-                <select class="form-select" aria-label="Select Std Options" id="std-options">
-                </select>
-            </div>
-            <div class="col-md-3 ml-5 button-container">
-                <button type="button" class="btn run-btn" onclick="executeCode()"><i class="fas fa-play"></i>
-                    Run</button>
-                <button type="button" class="btn btn-dark clear-btn ml-1" id='clearOutput' onclick="clearOutput()"><i
-                        class="fas fa-ban"></i>
-                    Clear</button>
-            </div>
-            <div class="col dropdown">
-                <button class="btn share-btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fas fa-share-alt"></i>
-                    Share
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#embedCodeModal" id="embed" data-toggle="modal">
-                        <i class="fas fa-share"></i>
-                        Embed
-                    </a>
-                    <a class="dropdown-item disabled" href="#" id="email">
-                        <i class="far fa-envelope"></i>
-                        Email</a>
+        <%- include('./partials/navbar.ejs', {title: 'WasmFiddle' }) %>
+            <div class="row" style="height: 25px"></div>
+            <div class="row justify-content-around">
+                <div class="col-10">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <select class="form-select" aria-label="Select Language" id="languages">
+                                <option selected value="c"> C </option>
+                                <option value="cpp"> C++ </option>
+                                <option value="rust"> Rust </option>
+                            </select>
+                            <select class="form-select" aria-label="Select Std Options" id="std-options">
+                            </select>
+                        </div>
+                        <div class="col-md-6 button-container">
+                            <div class="float-left">
+                                <button type="button" class="btn run-btn" onclick="executeCode()"><i class="fas fa-play"></i>
+                                    Run
+                                </button>
+                                <button type="button" class="btn btn-dark clear-btn" id='clearOutput'
+                                onclick="clearOutput()"><i class="fas fa-ban"></i>
+                                    Clear
+                                </button>
+                            </div>
+                            <div class="dropdown float-right">
+                                <button class="btn share-btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-share-alt"></i> Share
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#embedCodeModal" id="embed" data-toggle="modal">
+                                        <i class="fas fa-share"></i> Embed
+                                    </a>
+                                    <a class="dropdown-item disabled" href="#" id="email">
+                                        <i class="far fa-envelope"></i> Email
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        		</div>
+            </div><br>
+	
+            <div class="row justify-content-around">
+                <div class="col-10">
+                    <!-- <div class="row no-gutters" style="height: 1000;"> -->
+                    <div class="row">
+                        <div class="col-md-6" style="resize: none">
+                            <textarea class="editor" id="editor" style="resize: none"></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="output text-white bg-dark">
+                                <div id="output-container"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div><br>
-        <div class="row no-gutters" style="height: 1000;">
-            <div class="col-5 offset-md-1 mr-5" style="resize: none">
-                <textarea class="editor" id="editor" style="resize: none"></textarea>            </div>
-            <div class="col-4 text-white bg-dark">
-                <div class="output">
-                    <div id="output-container"></div>
+
+            <div class="row" style="height: 25px"></div>
+            <div class="row justify-content-around">
+                <div class="col-10">
+                    <div class="textarea text-white bg-dark" style="height:200px" id="instructions-container">
+                        
+                    </div>
                 </div>
             </div>
-        </div>
+            <!-- Modal to show code to embed in website -->
+            <%- include('./partials/modal.ejs', {modalId: 'embedCodeModal' , embeddableCodeId: 'embeddableCode' }) %>
 
-        <!-- Modal to show code to embed in website -->
-        <%- include('./partials/modal.ejs', {modalId: 'embedCodeModal', embeddableCodeId: 'embeddableCode'}) %>
-
-        <!-- Toast -->
-        <%- include('./partials/toast.ejs', {toastId: 'copiedToast', toastMsg: 'Copied!'}) %>
+                <!-- Toast -->
+                <%- include('./partials/toast.ejs', {toastId: 'copiedToast' , toastMsg: 'Copied!' }) %>
     </body>
 
     </html>
