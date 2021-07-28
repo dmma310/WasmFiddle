@@ -21,14 +21,16 @@ https://wasmfiddle-c-cpp-rust.uw.r.appspot.com
 
 ## Additional Tools Needed
 
-1. wasmtime
+1. Wasmtime
     - https://github.com/bytecodealliance/wasmtime
 	- Install folder containing precompiled binary at the root of this application.
 	- Note the folder contains the version number i.e. 'wasmtime-v0.28.0-x86_64-linux'. You may need to update the WASMTIME_VERSION const variable in the helpers.js file.
-2. wasi sdk
+2. Wasi sdk
     - https://github.com/WebAssembly/wasi-sdk
     - Install folder at root of this application
     - Note the folder will contain a version i.e. 'wasi-sdk-12.0'. You'll need to update the WASI_VERSION const variable in the helpers.js file.
-3. rust
+3. Rust
     - https://github.com/bytecodealliance/wasmtime/blob/main/docs/WASI-tutorial.md#from-rust
     - https://rustwasm.github.io/docs/book/game-of-life/setup.html
+4. Google Cloud Platform
+    - After deploying to GCP, run 'setup.bash' in GCP environment to ensure all libraries are installed.

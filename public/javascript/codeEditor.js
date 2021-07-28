@@ -41,11 +41,15 @@ window.onload = _ => {
     $('#languages').focusin(function () {
         codeStates[this.value].code = editor.getValue();
     });
+    // When user selects new language, update selected value and compilation instructions
     $('#languages').change(function () {
         changeLanguage(this.value);
         filterStdOptions(this.value);
         $('#std-options').val(codeStates[this.value].selected);
+        // Update compile instructions
+        updateInstruct(this.value, $('#std-options').val());
     });
+    // When user selects new std, update selected value and compilation instructions
     $('#std-options').change(function () {
         codeStates[$('#languages').val()].selected = this.value;
         // Update compile instructions
@@ -73,9 +77,7 @@ function changeLanguage(val) {
         editor.setOption('mode', 'text/x-rustsrc');
     }
     editor.setValue(codeStates[val].code);
-    console.log($('#std-options').val()); // TODO: Not working
     // Update compile instructions
-    updateInstruct($('#languages').val(), $('#std-options').val());
 }
 
 function filterStdOptions(val) {
@@ -94,7 +96,6 @@ function executeCode() {
         data: {
             language: $('#languages').val(),
             options: `-std=${$('#std-options').val()}`,
-            // options: '-std=' + $('#std-options').val(),
             code: editor.getValue()
         },
         complete: (e, status, settings) => {
