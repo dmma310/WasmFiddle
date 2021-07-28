@@ -77,7 +77,6 @@ function changeLanguage(val) {
         editor.setOption('mode', 'text/x-rustsrc');
     }
     editor.setValue(codeStates[val].code);
-    // Update compile instructions
 }
 
 function filterStdOptions(val) {
