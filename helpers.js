@@ -1,9 +1,11 @@
 const { exec } = require('child_process');
 const fs = require('fs');
+const datastore = require('./server.js');
 const WASI_VERSION = 'wasi-sdk-12.0';
 const WASMTIME_VERSION = 'wasmtime-v0.28.0-x86_64-linux';
 const CLANG = 'clang';
 const CLANGPP = 'clang++';
+const CODE = "Code";
 
 module.exports.execCode = async (language, code, callback) => {
     // Create temp C/C++/Rust file with random name, write code
@@ -120,4 +122,21 @@ function execWasm(wasmFile, callback) {
         }
         return callback(stdout);
     });
+}
+
+// Save code to database and send back the link
+module.exports.saveCode = async (language, code, callback) => {
+
+    var new_code;
+    var key;
+    var prom;
+    try {
+        key = datastore.key(CODE);
+        new_code = {"lang": language, "code": code};
+        prom = await datastore.save({"key":key, "data": new_code}).then(() => {return key});
+        callback(prom);
+    }
+    catch (e) {
+        return `Error: ${e}`;
+    }
 }

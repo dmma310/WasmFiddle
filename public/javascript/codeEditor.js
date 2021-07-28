@@ -1,5 +1,3 @@
-const CODE = "code";
-
 const codeStates = {
     c: '#include <stdio.h>\n\nint main() {\n  printf("Hello World!");\n\  return 0;\n}\n',
     cpp: '#include <iostream>\n\nint main() {\n  std::cout << "Hello World!";\n  return 0;\n}\n',
@@ -24,9 +22,6 @@ window.onload = _ => {
     });
     // Ensure clear button is disabled
     $('#clearOutput').prop('disabled', true);
-
-    // Send link to code via email
-    createLinktoCode();
 }
 
 function changeLanguage(val) {
@@ -79,42 +74,29 @@ function copyEmbeddedCode(id) {
     $('#copiedToast').toast({delay:1000}).toast('show');
 }
 
-function createLinktoCode() {
-    // $('#email').click(function (e) {
-    //     e.preventDefault();
-    // });
+function copyShareLink(id) {
+    // Select and copy text into clipboard
+    const text = $(`#${id}`).select();
+    document.execCommand('copy');
+    // Hide popup and show successfully copy .toast
+    $('#shareLink').modal('hide');
+    $('#copiedToast').toast({delay:1000}).toast('show');
+}
 
-    var key = post_code();
-
+// For adding code to the database
+function addCode() {
     $.ajax({
         url: '/',
-        method: 'GET',
-        // data: {
-        //     language: $('#languages').val(),
-        //     code: editor.getValue()
-        // },
+        method: 'POST',
+        data: {
+            language: $('#languages').val(),
+            code: editor.getValue(),
+            share: 1
+        },
         complete: (e, status, settings) => {
             if (e.status === 201) {
-
+                document.getElementById('shareLink').value = e.responseText;
             }
         }
     });
-
-
-}
-
-function post_code() {
-
-    //const datastore = new Datastore();
-    var language = $('#languages').val();
-    var code = editor.getValue();
-
-    var code_key = this.datastore.key(CODE);
-    var new_code = {"language": language, "code": code}
-
-    datastore.save({"key": code_key, "data": new_code});
-
-    console.log("Hello" + code_id);
-
-    return code_key
 }

@@ -33,9 +33,10 @@
                     <a class="dropdown-item disabled" href="#" id="email">
                         <i class="far fa-envelope"></i>
                         Email</a>
-                    <a class="dropdown-item" href="#" onclick="post_code()" id="share">
+                    <a class="dropdown-item cursor-hand" data-toggle="modal" data-target="#shareLink" onclick="addCode()" id="share">
                         <i class="fa fa-paper-plane"></i>
-                        Share</a>
+                        Share
+                    </a>
                 </div>
             </div>
         </div><br>
@@ -51,6 +52,9 @@
 
         <!-- Modal to show code to embed in website -->
         <%- include('./partials/modal.ejs', {modalId: 'embedCodeModal', embeddableCodeId: 'embeddableCode'}) %>
+
+        <!-- Modal to show link to share code -->
+        <%- include('./partials/share.ejs', {modalId: 'shareLink', shareLinkId: 'shareLink'}) %>
 
         <!-- Toast -->
         <%- include('./partials/toast.ejs', {toastId: 'copiedToast', toastMsg: 'Copied!'}) %>
