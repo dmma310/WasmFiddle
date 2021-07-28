@@ -26,7 +26,7 @@ module.exports.execCode = async (language, options, code, callback) => {
 
 // Creates the specified file type with random name
 function createFileWithCode(language, code) {
-    const file = `tmp/${randomFileName(language)}`;
+    const file = `/tmp/${randomFileName(language)}`;
     fs.promises.writeFile(file, code);
     return file;
 }
@@ -45,13 +45,13 @@ function execCCPP(language, options, file, wasmFile, callback) {
     // Generate wasm file with wasmtime, using the appropriate compiler
     const cmd = wasmCmd(language, options, file, wasmFile);
     return exec(cmd, (err, stdout, stderr) => {
-        if (err) {
-            console.log(err);
-            return callback(`Error: ${err.cmd}`);
-        }
         if (stderr) {
             console.log(stderr);
             return callback(`Error: ${stderr}`);
+        }
+        if (err) {
+            console.log(err);
+            return callback(`Error: ${err.cmd}`);
         }
         // Execute wasm file and return results
         return execWasm(wasmFile, callback);
@@ -88,7 +88,7 @@ function wasmCmd(language, options, file, wasmFile = null) {
         --sysroot=${WASI_VERSION}/share/wasi-sysroot\
         ${options} ${file} -o ${wasmFile}`;
     }
-    return `rustc --target wasm32-wasi ${file} -o ${wasmFile}`;
+    return `rust/bin/rustc --target wasm32-wasi ${file} -o ${wasmFile}`;
 }
 
 // Use wasitime to execute and return results of Rust.wasm
@@ -97,26 +97,26 @@ function execRust(rustFile, wasmFile, callback) {
     const rustWasmCmd = wasmCmd('rust', '', rustFile, wasmFile);
     // Create and execute wasm file, return results
     return exec(rustWasmCmd, (err, stdout, stderr) => {
-        if (err) {
-            return callback(`Error: ${err.cmd}`);
-        }
         if (stderr) {
             console.log(stderr);
             return callback(`Error: ${stderr}`);
         }
-        return execWasm(wasmFile, callback);
+        if (err) {
+            return callback(`Error: ${err.cmd}`);
+        }
+		return execWasm(wasmFile, callback);
     });
 }
 
 function execWasm(wasmFile, callback) {
     // Execute wasm file and return results
     return exec(`${WASMTIME_VERSION}/wasmtime ${wasmFile}`, (err, stdout, stderr) => {
-        if (err) {
-            return callback(`Error: ${err.cmd}`);
-        }
         if (stderr) {
             console.log(stderr);
             return callback(`Error: ${stderr}`);
+        }
+        if (err) {
+            return callback(`Error: ${err.cmd}`);
         }
         return callback(stdout);
     });
