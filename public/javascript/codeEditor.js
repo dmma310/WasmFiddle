@@ -100,7 +100,10 @@ function executeCode() {
         complete: (e, status, settings) => {
             if (e.status === 201) {
                 // Create new output line
-                const line = $('<div/>', { text: e.responseText });
+                const line = $('<div/>', {
+                    text: e.responseText,
+                    class: 'line'
+                });
                 line.appendTo('#output-container');
                 // Scroll to bottom of container
                 line.get(0).scrollIntoView();
