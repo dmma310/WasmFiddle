@@ -22,6 +22,7 @@ const GIT_LINK = 'git link'.link('https://git-scm.com/downloads');
 let editor;
 
 window.onload = _ => {
+    // Set Code Editor configuration
     let code = $('.editor')[0];
     editor = CodeMirror.fromTextArea(code, {
         lineNumbers: true,
@@ -34,26 +35,12 @@ window.onload = _ => {
     editor.setValue(codeStates[lang].code);
     // Cascade std options dropdown
     filterStdOptions(lang);
-    // Select default value
+    // Select default language and compile standard
     const std = codeStates[lang].selected;
     $('#std-options').val(std);
 
     $('#languages').focusin(function () {
         codeStates[this.value].code = editor.getValue();
-    });
-    // When user selects new language, update selected value and compilation instructions
-    $('#languages').change(function () {
-        changeLanguage(this.value);
-        filterStdOptions(this.value);
-        $('#std-options').val(codeStates[this.value].selected);
-        // Update compile instructions
-        updateInstruct(this.value, $('#std-options').val());
-    });
-    // When user selects new std, update selected value and compilation instructions
-    $('#std-options').change(function () {
-        codeStates[$('#languages').val()].selected = this.value;
-        // Update compile instructions
-        updateInstruct($('#languages').val(), this.value);
     });
 
     // Ensure clear button is disabled
@@ -63,9 +50,32 @@ window.onload = _ => {
     createLinktoCode();
 
     // Show instructions for how to compile
-    updateInstruct(lang, std);
+    updateInstruct(lang, [`std=${std}`]);
+
+    onChange(); // Listen for language or compile standard change
 }
 
+// Listen for language or compile standard change, update accordingly
+function onChange() {
+    // When user selects new language, update selected value,
+    // default compile standard, and compilate instructions
+    $('#languages').change(function () {
+        changeLanguage(this.value);
+        filterStdOptions(this.value);
+        $('#std-options').val(codeStates[this.value].selected);
+        // Update compile instructions
+        updateInstruct(this.value, [`std=${$('#std-options').val()}`]);
+    });
+    // When user selects new std, update selected value and compilation instructions
+    $('#std-options').change(function () {
+        codeStates[$('#languages').val()].selected = this.value;
+        // Update compile instructions
+        updateInstruct($('#languages').val(), [`std=${this.value}`]);
+    });
+
+}
+
+// Set Code editor to new language mode
 function changeLanguage(val) {
     if (val === 'c') {
         editor.setOption('mode', 'text/x-csrc');
@@ -87,6 +97,7 @@ function filterStdOptions(val) {
     $('#std-options').html(html);
 }
 
+// When user presses 'Run', send code to backend, and display results
 function executeCode() {
     $.ajax({
         url: '/',
@@ -113,33 +124,40 @@ function executeCode() {
     });
 }
 
+// Clear output window and disable 'Clear' button
 function clearOutput() {
     // Ensure clear button is disabled
     $('#clearOutput').prop('disabled', true);
     $('#output-container').empty();
 }
 
+// Select and copy text into clipboard
 function copyEmbeddedCode(id) {
-    // Select and copy text into clipboard
-    const text = $(`#${id}`).select();
+    $(`#${id}`).select();
     document.execCommand('copy');
     // Hide popup and show successfully copy toast.
     $('#embedCodeModal').modal('hide');
     $('#copiedToast').toast({ delay: 1000 }).toast('show');
 }
 
+
+// TODO: Email functionality
 function createLinktoCode() {
     $('#email').click(function (e) {
         e.preventDefault();
     });
 }
 
-// Use like compileInstruc('gcc', [Wall, std=gnu89], 'hello.c');
-function compileInstruc(compiler, options, file) {
-    return `${compiler} -${options.join('- ')} ${file} -o ${file.substr(0, file.indexOf('.'))}`;
+// Show instructions for how to compile
+function updateInstruct(lang, options) {
+    const langExt = lang === 'rust' ? 'rs' : $('#languages').val();
+    const instruct = runInstruc(lang, options, 'hello', langExt);
+    $('#instructions-container').html(instruct);
 }
 
-function runInstruc(lang, std, file) {
+// Generate instructions for how to compile
+function runInstruc(lang, options, fileName, ext) {
+    console.log(options);
     let compileCmd, compilerLink;
     if (lang === 'rust') {
         compileCmd = `rustc ${file}`;
@@ -147,7 +165,7 @@ function runInstruc(lang, std, file) {
     }
     else {
         compilerLink = GCC_LINK;
-        compileCmd = compileInstruc(lang === 'c' ? 'gcc' : 'g++', [`std=${std}`], file);
+        compileCmd = compileInstruc(lang === 'c' ? 'gcc' : 'g++', options, `${fileName}.${ext}`);
     }
     return `NOTE: Ensure you have Git installed:<br>\
     ${GIT_LINK}<br>\
@@ -156,19 +174,11 @@ function runInstruc(lang, std, file) {
     2. Run the following command to compile the file:\n\
     ${compileCmd}<br>\
     3. Execute the newly compiled file:<br>\
-    Windows: .\\${file.substr(0, file.indexOf('.'))}.exe<br>\
-    Other: ./${file.substr(0, file.indexOf('.'))}<br>`;
+    Windows: .\\${fileName}.exe<br>\
+    Other: ./${fileName}<br>`;
 }
 
-function updateInstruct(lang, options) {
-    // Show instructions for how to compile
-    let langExt;
-    if (lang === 'rust') {
-        langExt = 'rs';
-    }
-    else {
-        langExt =  $('#languages').val();
-    }
-    const instruct = runInstruc(lang, options, `hello.${langExt}`);
-    $('#instructions-container').html(instruct);
+// Use like compileInstruc('gcc', [Wall, std=gnu89], 'hello.c');
+function compileInstruc(compiler, options, file) {
+    return `${compiler} -${options.join('- ')} ${file} -o ${file.substr(0, file.indexOf('.'))}`;
 }
