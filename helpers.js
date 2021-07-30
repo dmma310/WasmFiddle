@@ -11,13 +11,13 @@ module.exports.execCode = async (language, options, code, callback) => {
     // Create temp C/C++/Rust file with random name, write code
     let file;
     try {
-        file = await createFileWithCode(language, code);
+        file = await createFileWithCode(language, code); // return '/tmp/fh4f3.c'
     }
     catch (e) {
         return `Error: ${e}`;
     }
     finally {
-        // Create and execute wasm file, return results
+        // Create and execute wasm file, return results, delete temp file
         await execFileWithWasm(file, language, options, output => {
             deleteTempFile(file);
             deleteTempFile(`${file.substr(0, file.indexOf('.'))}.wasm`);
@@ -26,7 +26,7 @@ module.exports.execCode = async (language, options, code, callback) => {
     }
 }
 
-// Creates the specified file type with random name
+// Create the specified file type with random name and code contents
 function createFileWithCode(language, code) {
     const file = `/tmp/${randomFileName(language)}`;
     fs.promises.writeFile(file, code);
@@ -40,7 +40,7 @@ function execFileWithWasm(file, language, options, callback) {
     const wasmFile = `${file.substr(0, file.indexOf('.'))}.wasm`;
     let cmd;
     if (language === 'rust') {
-        installRust();
+        if (!rustInstalled) installRust();
         cmd = wasmCmd(language, '', file, wasmFile);
     }
     else {
@@ -142,7 +142,7 @@ function wasmCmd(language, options, file, wasmFile = null) {
         --sysroot=${WASI_VERSION}/share/wasi-sysroot\
         ${options} ${file} -o ${wasmFile}`;
     }
-    return `rust/bin/rustc --target wasm32-wasi ${file} -o ${wasmFile}`;
+    return `~/.cargo/bin/rustc --target wasm32-wasi ${file} -o ${wasmFile}`;
 }
 
 function execWasm(wasmFile, callback) {
