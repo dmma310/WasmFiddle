@@ -1,9 +1,11 @@
-const { exec } = require('child_process');
+const { exec, execSync } = require('child_process');
 const fs = require('fs');
 const WASI_VERSION = 'wasi-sdk-12.0';
 const WASMTIME_VERSION = 'wasmtime-v0.28.0-x86_64-linux';
 const CLANG = 'clang';
 const CLANGPP = 'clang++';
+
+let rustInstalled = process.env.NODE_ENV === 'dev' ? true : false;
 
 module.exports.execCode = async (language, options, code, callback) => {
     // Create temp C/C++/Rust file with random name, write code
@@ -36,7 +38,14 @@ function createFileWithCode(language, code) {
 // Choose to execute wasm with Rust or C/C++
 function execFileWithWasm(file, language, options, callback) {
     const wasmFile = `${file.substr(0, file.indexOf('.'))}.wasm`;
-    const cmd = wasmCmd(language, language === 'rust' ? '' : options, file, wasmFile);
+    let cmd;
+    if (language === 'rust') {
+        installRust();
+        cmd = wasmCmd(language, '', file, wasmFile);
+    }
+    else {
+        cmd = wasmCmd(language, options, file, wasmFile);
+    }
     // Create and execute wasm file, return results
     return exec(cmd, (err, stdout, stderr) => {
         if (stderr) {
@@ -47,6 +56,14 @@ function execFileWithWasm(file, language, options, callback) {
         }
         return execWasm(wasmFile, callback);
     });
+}
+
+// Install Rust and add wasm32-wasi target
+function installRust() {
+    execSync('curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal > /dev/null 2>&1');
+    execSync('~/.cargo/bin/rustup target add wasm32-wasi > /dev/null 2>&1');
+    console.log('Rust installed');
+    rustInstalled = true;
 }
 
 // // Choose to execute wasm with Rust or C/C++
