@@ -1,5 +1,6 @@
 runtime: nodejs14
 # If entrypoint is omitted, uses package.json start script i.e. "entrypoint: node server.js"
-steps:
-- name: 'bash'
-  args: ['./setup.bash']
+# steps:
+# - name: 'bash'
+#   args: ['./setup.bash']
+instance_class: F4_1G
