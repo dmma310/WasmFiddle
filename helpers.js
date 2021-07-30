@@ -33,8 +33,6 @@ function createFileWithCode(language, code) {
     return file;
 }
 
-// **************************************************************************************************
-
 // Choose to execute wasm with Rust or C/C++
 function execFileWithWasm(file, language, options, callback) {
     const wasmFile = `${file.substr(0, file.indexOf('.'))}.wasm`;
@@ -65,52 +63,6 @@ function installRust() {
     console.log('Rust installed');
     rustInstalled = true;
 }
-
-// // Choose to execute wasm with Rust or C/C++
-// function execFileWithWasm(file, language, options, callback) {
-//     const wasmFile = `${file.substr(0, file.indexOf('.'))}.wasm`;
-//     if (language === 'rust') {
-//         return execRust(file, wasmFile, callback);
-//     }
-//     return execCCPP(language, options, file, wasmFile, callback);
-// }
-
-// // Use wasitime to execute and return results of Rust.wasm
-// // Source: https://github.com/bytecodealliance/wasmtime
-// function execRust(rustFile, wasmFile, callback) {
-//     const rustWasmCmd = wasmCmd('rust', '', rustFile, wasmFile);
-//     // Create and execute wasm file, return results
-//     return exec(rustWasmCmd, (err, stdout, stderr) => {
-//         if (stderr) {
-//             console.log(stderr);
-//             return callback(`Error: ${stderr}`);
-//         }
-//         if (err) {
-//             return callback(`Error: ${err.cmd}`);
-//         }
-// 		return execWasm(wasmFile, callback);
-//     });
-// }
-
-// // Execute wasm with C/C++
-// function execCCPP(language, options, file, wasmFile, callback) {
-//     // Generate wasm file with wasmtime, using the appropriate compiler
-//     const cmd = wasmCmd(language, options, file, wasmFile);
-//     return exec(cmd, (err, stdout, stderr) => {
-//         if (stderr) {
-//             console.log(stderr);
-//             return callback(`Error: ${stderr}`);
-//         }
-//         if (err) {
-//             console.log(err);
-//             return callback(`Error: ${err.cmd}`);
-//         }
-//         // Execute wasm file and return results
-//         return execWasm(wasmFile, callback);
-//     });
-// }
-
-// **************************************************************************************************
 
 // Delete file at specified location
 function deleteTempFile(filePath) {
