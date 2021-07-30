@@ -9,13 +9,13 @@ module.exports.execCode = async (language, options, code, callback) => {
     // Create temp C/C++/Rust file with random name, write code
     let file;
     try {
-        file = await createFileWithCode(language, code);
+        file = await createFileWithCode(language, code); // return '/tmp/fh4f3.c'
     }
     catch (e) {
         return `Error: ${e}`;
     }
     finally {
-        // Create and execute wasm file, return results
+        // Create and execute wasm file, return results, delete temp file
         await execFileWithWasm(file, language, options, output => {
             deleteTempFile(file);
             deleteTempFile(`${file.substr(0, file.indexOf('.'))}.wasm`);
@@ -24,7 +24,7 @@ module.exports.execCode = async (language, options, code, callback) => {
     }
 }
 
-// Creates the specified file type with random name
+// Create the specified file type with random name and code contents
 function createFileWithCode(language, code) {
     const file = `/tmp/${randomFileName(language)}`;
     fs.promises.writeFile(file, code);
@@ -38,6 +38,23 @@ function execFileWithWasm(file, language, options, callback) {
         return execRust(file, wasmFile, callback);
     }
     return execCCPP(language, options, file, wasmFile, callback);
+}
+
+// Use wasitime to execute and return results of Rust.wasm
+// Source: https://github.com/bytecodealliance/wasmtime
+function execRust(rustFile, wasmFile, callback) {
+    const rustWasmCmd = wasmCmd('rust', '', rustFile, wasmFile);
+    // Create and execute wasm file, return results
+    return exec(rustWasmCmd, (err, stdout, stderr) => {
+        if (stderr) {
+            console.log(stderr);
+            return callback(`Error: ${stderr}`);
+        }
+        if (err) {
+            return callback(`Error: ${err.cmd}`);
+        }
+        return execWasm(wasmFile, callback);
+    });
 }
 
 // Execute wasm with C/C++
@@ -58,6 +75,35 @@ function execCCPP(language, options, file, wasmFile, callback) {
     });
 }
 
+// Generate wasm file using wasmtime based on language
+function wasmCmd(language, options, file, wasmFile = null) {
+    if (language === 'cpp') {
+        return `${WASI_VERSION}/bin/${CLANGPP}\
+    --sysroot=${WASI_VERSION}/share/wasi-sysroot\
+    ${options} ${file} -o ${wasmFile}`;
+    }
+    if (language === 'c') {
+        return `${WASI_VERSION}/bin/${CLANG}\
+        --sysroot=${WASI_VERSION}/share/wasi-sysroot\
+        ${options} ${file} -o ${wasmFile}`;
+    }
+    return `rust/bin/rustc --target wasm32-wasi ${file} -o ${wasmFile}`;
+}
+
+function execWasm(wasmFile, callback) {
+    // Execute wasm file and return results
+    return exec(`${WASMTIME_VERSION}/wasmtime ${wasmFile}`, (err, stdout, stderr) => {
+        if (stderr) {
+            console.log(stderr);
+            return callback(`Error: ${stderr}`);
+        }
+        if (err) {
+            return callback(`Error: ${err.cmd}`);
+        }
+        return callback(stdout);
+    });
+}
+
 // Delete file at specified location
 function deleteTempFile(filePath) {
     fs.unlink(filePath, err => {
@@ -74,50 +120,4 @@ function randomFileName(extension = '') {
     return extension === '' ?
         `${Math.random().toString(36).substring(2, 7)}` :
         `${Math.random().toString(36).substring(2, 7)}.${extension}`;
-}
-
-// Generate wasm file using wasmtime based on language
-function wasmCmd(language, options, file, wasmFile = null) {
-    if (language === 'cpp') {
-        return `${WASI_VERSION}/bin/${CLANGPP}\
-    --sysroot=${WASI_VERSION}/share/wasi-sysroot\
-    ${options} ${file} -o ${wasmFile}`;
-    }
-    if (language === 'c') {
-        return `${WASI_VERSION}/bin/${CLANG}\
-        --sysroot=${WASI_VERSION}/share/wasi-sysroot\
-        ${options} ${file} -o ${wasmFile}`;
-    }
-    return `rust/bin/rustc --target wasm32-wasi ${file} -o ${wasmFile}`;
-}
-
-// Use wasitime to execute and return results of Rust.wasm
-// Source: https://github.com/bytecodealliance/wasmtime
-function execRust(rustFile, wasmFile, callback) {
-    const rustWasmCmd = wasmCmd('rust', '', rustFile, wasmFile);
-    // Create and execute wasm file, return results
-    return exec(rustWasmCmd, (err, stdout, stderr) => {
-        if (stderr) {
-            console.log(stderr);
-            return callback(`Error: ${stderr}`);
-        }
-        if (err) {
-            return callback(`Error: ${err.cmd}`);
-        }
-		return execWasm(wasmFile, callback);
-    });
-}
-
-function execWasm(wasmFile, callback) {
-    // Execute wasm file and return results
-    return exec(`${WASMTIME_VERSION}/wasmtime ${wasmFile}`, (err, stdout, stderr) => {
-        if (stderr) {
-            console.log(stderr);
-            return callback(`Error: ${stderr}`);
-        }
-        if (err) {
-            return callback(`Error: ${err.cmd}`);
-        }
-        return callback(stdout);
-    });
 }
