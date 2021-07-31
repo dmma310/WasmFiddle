@@ -36,7 +36,6 @@ function execFileWithWasm(file, language, options, callback) {
     const wasmFile = `${file.substr(0, file.indexOf('.'))}.wasm`;
     let cmd;
     if (language === 'rust') {
-        if (!rustInstalled) installRust();
         cmd = wasmCmd(language, '', file, wasmFile);
     }
     else {
