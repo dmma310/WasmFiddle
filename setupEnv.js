@@ -1,7 +1,9 @@
 module.exports.setupEnv = () => {
-    installWasiSDK();
-    installWasmtime();
-    installRust();
+    if (process.env.NODE_ENV !== 'dev') {
+        installWasiSDK();
+        installWasmtime();
+        installRust();
+    }
 }
 
 function installWasiSDK() {
