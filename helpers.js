@@ -5,8 +5,6 @@ const WASMTIME_VERSION = 'wasmtime-v0.28.0-x86_64-linux';
 const CLANG = 'clang';
 const CLANGPP = 'clang++';
 
-let rustInstalled = process.env.NODE_ENV === 'dev' ? true : false;
-
 module.exports.execCode = async (language, options, code, callback) => {
     // Create temp C/C++/Rust file with random name, write code
     let file;
@@ -54,14 +52,6 @@ function execFileWithWasm(file, language, options, callback) {
         }
         return execWasm(wasmFile, callback);
     });
-}
-
-// Install Rust and add wasm32-wasi target
-function installRust() {
-    execSync('curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal > /dev/null 2>&1');
-    execSync('~/.cargo/bin/rustup target add wasm32-wasi > /dev/null 2>&1');
-    console.log('Rust installed');
-    rustInstalled = true;
 }
 
 // Delete file at specified location
