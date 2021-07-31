@@ -1,4 +1,4 @@
-const { exec, execSync } = require('child_process');
+const { exec } = require('child_process');
 const fs = require('fs');
 const WASI_VERSION = 'wasi-sdk-12.0';
 const WASMTIME_VERSION = 'wasmtime-v0.28.0-x86_64-linux';
