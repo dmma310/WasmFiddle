@@ -2,9 +2,9 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
-const { execCode } = require('./helpers.js');
+const { execCode } = require('./lib/helpers.js');
 
-const { setupEnv } = require('./setupEnv');
+const { setupEnv } = require('./lib/setupEnv');
 
 app.use(express.json());
 app.use(express.urlencoded());
