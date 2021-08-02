@@ -2,7 +2,10 @@ const express = require('express');
 const app = express();
 const path = require('path');
 
-const { execCode } = require('./helpers.js');
+const { execCode } = require('./lib/helpers.js');
+
+const { setupEnv } = require('./lib/setupEnv');
+
 app.use(express.json());
 app.use(express.urlencoded());
 
@@ -11,6 +14,8 @@ app.enable('trust proxy'); // Ensure req.protocol can use https if applicable
 
 // Static folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+setupEnv(); // Install required libraries and Rust language
 
 app.get('/', function (req, res) {
   return res.status(200).render('home');
