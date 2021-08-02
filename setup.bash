@@ -25,6 +25,10 @@ wget https://github.com/bytecodealliance/wasmtime/releases/download/$wasmtime_ve
 tar -xf wasmtime-$wasmtime_version-x86_64-linux.tar.xz
 rm wasmtime-$wasmtime_version-x86_64-linux.tar.xz
 
+echo "Installing Rust"
+curl https://sh.rustup.rs -sSf | sh -s -- -y --profile minimal > /dev/null 2>&1
+~/.cargo/bin/rustup target add wasm32-wasi > /dev/null 2>&1
+
 # echo "Installing rust"
 # mkdir rust
 # RUSTUP_HOME=./rust CARGO_HOME=./rust bash -c "curl https://sh.rustup.rs -sSf | sh -s -- -y"
