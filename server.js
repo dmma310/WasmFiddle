@@ -3,7 +3,6 @@ const app = express();
 const path = require('path');
 
 const { Datastore } = require('@google-cloud/datastore');
-const bodyParser = require('body-parser');
 const datastore = new Datastore();
 module.exports = datastore;
 
@@ -20,12 +19,18 @@ app.enable('trust proxy'); // Ensure req.protocol can use https if applicable
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', function (req, res) {
-  return res.status(200).render('home');
+  return res.status(200).render('home', {shareid: '', code: '', lang: ''});
 });
 
 app.get('/:id', function (req, res) {
-  // Render home page with code in editor
-  return res.status(200).render('home');
+  const key = datastore.key(["Code", parseInt(req.params.id, 10)]);
+  datastore.get(key).then( (codeData) => {
+    const code = codeData[0]['code'];
+    const lang = codeData[0]['lang'];
+
+    // Render home page with code in editor
+    return res.status(200).render('home', {shareid: 'share', code: code, lang: lang});
+  });
 });
 
 app.post('/', function(req, res) {
@@ -33,7 +38,7 @@ app.post('/', function(req, res) {
   const options = req.body.options;
   const code = req.body.code;
   if (req.body.share) {
-    saveCode(lang, code, obj => {
+    saveCode(lang, options, code, obj => {
       const link = req.protocol + "://" + req.get("host") + req.baseUrl + '/' + obj.id;
       return res.status(201).send(`${link}`);
     });
