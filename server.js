@@ -15,7 +15,7 @@ app.enable('trust proxy'); // Ensure req.protocol can use https if applicable
 // Static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
-setupEnv(); // Install required libraries and Rust language
+// setupEnv(); // Install required libraries and Rust language
 
 app.get('/', function (req, res) {
   return res.status(200).render('home');

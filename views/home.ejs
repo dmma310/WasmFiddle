@@ -43,7 +43,6 @@
                     </div>
         		</div>
             </div><br>
-	
             <div class="row justify-content-around">
                 <div class="col-10">
                     <!-- <div class="row no-gutters" style="height: 1000;"> -->
@@ -59,7 +58,8 @@
                     </div>
                 </div>
             </div>
-
+            <!-- Toast -->
+            <%- include('./partials/toast.ejs', {toastId: 'copiedToast' , toastMsg: 'Copied!' }) %>
             <div class="row" style="height: 25px"></div>
             <div class="row justify-content-around">
                 <div class="col-10">
@@ -70,9 +70,6 @@
             </div>
             <!-- Modal to show code to embed in website -->
             <%- include('./partials/modal.ejs', {modalId: 'embedCodeModal' , embeddableCodeId: 'embeddableCode' }) %>
-
-                <!-- Toast -->
-                <%- include('./partials/toast.ejs', {toastId: 'copiedToast' , toastMsg: 'Copied!' }) %>
     </body>
 
     </html>
