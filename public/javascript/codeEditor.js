@@ -1,4 +1,4 @@
-const codeStates = {
+var codeStates = {
     c: {
         code: '#include <stdio.h>\n\nint main() {\n  printf("Hello World!");\n\  return 0;\n}\n',
         options: ['c89', 'gnu89', 'c94', 'c99', 'gnu99', 'c11', 'gnu11', 'c17', 'gnu17', 'c2x', 'gnu2x'],
@@ -30,9 +30,17 @@ window.onload = _ => {
         mode: 'text/x-csrc',
         lineWrapping: true
     });
+    
+    if(document.getElementById('share')) {
+        const sharedCode = document.getElementById('share').getAttribute('data-code');
+        const sharedLang = document.getElementById('share').getAttribute('data-lang');
+        codeStates[sharedLang].code = sharedCode;
+    }
+
     // Set default code
     const lang = $('#languages').val();
     editor.setValue(codeStates[lang].code);
+
     // Cascade std options dropdown
     filterStdOptions(lang);
     // Select default language and compile standard
@@ -140,7 +148,33 @@ function copyEmbeddedCode(id) {
     $('#copiedToast').toast({ delay: 1000 }).toast('show');
 }
 
+function copyShareLink(id) {
+    // Select and copy text into clipboard
+    const text = $(`#${id}`).select();
+    document.execCommand('copy');
+    // Hide popup and show successfully copy .toast
+    $('#shareLink').modal('hide');
+    $('#copiedToast').toast({delay:1000}).toast('show');
+}
 
+// For adding code to the database
+function addCode() {
+    $.ajax({
+        url: '/',
+        method: 'POST',
+        data: {
+            language: $('#languages').val(),
+            code: editor.getValue(),
+            share: 1
+        },
+        complete: (e, status, settings) => {
+            if (e.status === 201) {
+                document.getElementById('shareLink').value = e.responseText;
+                $('#shareLinkModal').modal('show');
+            }
+        }
+    });
+}
 // TODO: Email functionality
 function createLinktoCode() {
     $('#email').click(function (e) {

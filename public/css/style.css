@@ -37,3 +37,7 @@
 .toast {
     background-color: #ffffff;
 }
+
+.cursor-hand {
+    cursor: pointer;
+}
