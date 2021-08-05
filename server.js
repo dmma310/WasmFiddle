@@ -58,3 +58,4 @@ app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}. Press Ctrl+C to quit.`);
 });
 
+module.exports = app
