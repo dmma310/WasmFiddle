@@ -22,29 +22,31 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 setupEnv(); // Install required libraries and Rust language
 
+// Homepage
 app.get('/', function (req, res) {
-  return res.status(200).render('home', {shareid: '', code: '', lang: ''});
+  return res.status(200).render('home', { shareid: '', code: '', lang: '' });
 });
 
+// Retrieve saved code
 app.get('/:id', function (req, res) {
   const key = datastore.key(["Code", parseInt(req.params.id, 10)]);
-  datastore.get(key).then( (codeData) => {
+  datastore.get(key).then(codeData => {
     const code = codeData[0]['code'];
     const lang = codeData[0]['lang'];
 
-    // Render home page with code in editor
-    return res.status(200).render('home', {shareid: 'share', code: code, lang: lang});
+    // Render home page with saved code in editor
+    return res.status(200).render('home', { shareid: 'share', code: code, lang: lang });
   });
 });
 
-app.post('/', function(req, res) {
+app.post('/', function (req, res) {
   const lang = req.body.language;
   const options = req.body.options;
   const code = req.body.code;
+  // Save code to database or execute and return
   if (req.body.share) {
     saveCode(lang, options, code, obj => {
-      const link = req.protocol + "://" + req.get("host") + req.baseUrl + '/' + obj.id;
-      return res.status(201).send(`${link}`);
+      return res.status(201).send(`${req.protocol}://${req.get('host')}${req.baseUrl}'/'${obj.id}`);
     });
   } else {
     execCode(lang, options, code, output => {
@@ -58,4 +60,4 @@ app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}. Press Ctrl+C to quit.`);
 });
 
-module.exports = app
+module.exports = app;
