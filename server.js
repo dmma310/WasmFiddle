@@ -46,7 +46,7 @@ app.post('/', function (req, res) {
   // Save code to database or execute and return
   if (req.body.share) {
     saveCode(lang, options, code, obj => {
-      return res.status(201).send(`${req.protocol}://${req.get('host')}${req.baseUrl}'/'${obj.id}`);
+      return res.status(201).send(`${req.protocol}://${req.get('host')}${req.baseUrl}/${obj.id}`);
     });
   } else {
     execCode(lang, options, code, output => {
