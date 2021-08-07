@@ -73,6 +73,14 @@ function onChange() {
         $('#std-options').val(codeStates[this.value].selected);
         // Update compile instructions
         updateInstruct(this.value, [`std=${$('#std-options').val()}`]);
+        // Hide compile options if Rust
+        if (this.value === 'rust') {
+            $('#std-options').hide();
+            $('.checkboxes').hide();
+        } else {
+            $('#std-options').show();
+            $('.checkboxes').show();
+        }
     });
     // When user selects new std, update selected value and compilation instructions
     $('#std-options').change(function () {
@@ -80,7 +88,6 @@ function onChange() {
         // Update compile instructions
         updateInstruct($('#languages').val(), [`std=${this.value}`]);
     });
-
 }
 
 // Set Code editor to new language mode
@@ -97,8 +104,8 @@ function changeLanguage(val) {
     editor.setValue(codeStates[val].code);
 }
 
+// Get and set standards associated with language
 function filterStdOptions(val) {
-    // Get and set standards associated with language
     const html = $.map(codeStates[val].options, opt => {
         return `<option value="${opt}">${opt}</option>`;
     }).join('');
@@ -112,7 +119,7 @@ function executeCode() {
         method: 'POST',
         data: {
             language: $('#languages').val(),
-            options: `-std=${$('#std-options').val()}`,
+            options: getOptions(),
             code: editor.getValue()
         },
         complete: (e, status, settings) => {
@@ -191,10 +198,9 @@ function updateInstruct(lang, options) {
 
 // Generate instructions for how to compile
 function runInstruc(lang, options, fileName, ext) {
-    console.log(options);
     let compileCmd, compilerLink;
     if (lang === 'rust') {
-        compileCmd = `rustc ${file}`;
+        compileCmd = `rustc ${fileName}`;
         compilerLink = RUST_LINK;
     }
     else {
@@ -215,4 +221,14 @@ function runInstruc(lang, options, fileName, ext) {
 // Use like compileInstruc('gcc', [Wall, std=gnu89], 'hello.c');
 function compileInstruc(compiler, options, file) {
     return `${compiler} -${options.join('- ')} ${file} -o ${file.substr(0, file.indexOf('.'))}`;
+}
+
+// Build string for compile options
+function getOptions() {
+    if ($('#languages').val() === 'rust') return '';
+    let options = `-std=${$('#std-options').val()}`;
+    $('input[name=warnings]:checked').each((i, el) => {
+        options += ` -${el.value}`;
+    })
+    return options;
 }
