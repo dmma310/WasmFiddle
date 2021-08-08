@@ -160,7 +160,7 @@ function copyShareLink(id) {
     const text = $(`#${id}`).select();
     document.execCommand('copy');
     // Hide popup and show successfully copy .toast
-    $('#shareLink').modal('hide');
+    $('#shareLinkModal').modal('hide');
     $('#copiedToast').toast({delay:1000}).toast('show');
 }
 
