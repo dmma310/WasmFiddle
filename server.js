@@ -36,7 +36,7 @@ app.get('/:id', function (req, res) {
 
     // Render home page with saved code in editor
     return res.status(200).render('home', { shareid: 'share', code: code, lang: lang });
-  });
+  }).catch(err => {return res.status(404).render('404')});
 });
 
 app.post('/', function (req, res) {
