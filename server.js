@@ -29,7 +29,7 @@ app.get('/', function (req, res) {
 
 // Retrieve saved code
 app.get('/:id', function (req, res) {
-  const key = datastore.key(["Code", parseInt(req.params.id, 10)]);
+  const key = datastore.key(['Code', parseInt(req.params.id, 10)]);
   datastore.get(key).then(codeData => {
     const code = codeData[0]['code'];
     const lang = codeData[0]['lang'];
